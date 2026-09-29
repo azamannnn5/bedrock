@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+# Product/category pages render from these read-only JSON endpoints, so crawlers must be able to fetch them.
+Allow: /api/products.php
+Allow: /api/content.php
+Allow: /api/settings.php
+# Internal site-search result pages
+Disallow: /*?q=
+
+Sitemap: https://bedrocklapidary.com/sitemap.xml

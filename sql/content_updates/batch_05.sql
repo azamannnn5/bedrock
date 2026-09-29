@@ -1,0 +1,33 @@
+-- Batch 5 of an ongoing pass over the catalog, with original descriptions written for Bedrock Lapidary.
+-- Safe to re-run.
+
+UPDATE products SET blurb = 'The Dayton 1 hp Electric Motor is a 110V, 60Hz capacitor-start motor with thermal protection, turning at 1725 rpm.
+
+It is a compatible replacement for Covington 707HDS, 712HDS and 717HDS slab saws.', features = '["110V, 60Hz motor", "1 HP", "1725 RPM", "Capacitor start with thermal protection", "Compatible with Covington 707HDS, 712HDS, 717HDS slab saws"]', included = '[]', specs = '{"Horsepower": "1 HP", "Voltage": "110V, 60Hz", "Speed": "1725 RPM"}', warranty = NULL WHERE id = 'dayton-1-hp-electric-motor';
+UPDATE products SET blurb = 'The Lortone Tumbling Barrel Replacement is a molded rubber barrel with a Sure-Seal closure, sized for Lortone 3A and 33B tumblers.
+
+It holds 3 lb of material and measures 3-7/8 in across by 4-1/8 in deep inside. Inner and outer lids, a gasket, and a knurled nut and washer are included.', features = '["Molded rubber barrel", "Sure-Seal closure", "3 lb capacity", "Fits model 3A and 33B tumblers"]', included = '["Inner and outer lids", "Gasket", "Knurled nut and washer"]', specs = '{"Inside depth": "4-1/8\\"", "Inside diameter": "3-7/8\\"", "Capacity": "3 lb"}', warranty = NULL WHERE id = 'lortone-tumbling-barrel-replacement';
+UPDATE products SET blurb = 'The Lortone 33-B Rock Tumbler runs two 3 lb molded rubber barrels side by side, so you can process two separate batches at once.
+
+Each barrel has its own Sure-Seal closure to prevent leaks and spills, and the rubber keeps operation quieter than a hard barrel. Inside each barrel is 3-7/8 in in diameter and 4-1/8 in deep, on a base measuring 6.25 in by 10.25 in.', features = '["Two molded rubber barrels for quieter operation", "Sure-Seal closure on each barrel prevents leaks and spills", "Twin 3 lb barrels for dual-batch processing"]', included = '[]', specs = '{"Base dimensions": "6.25\\" W x 10.25\\" L", "Barrel inside depth": "4-1/8\\"", "Barrel inside diameter": "3-7/8\\""}', warranty = NULL WHERE id = 'lortone-33-b-rock-tumbler';
+UPDATE products SET blurb = 'The Lortone 3A Rock Tumbler is a single-barrel tumbler holding 3 lb, suitable for stones up to 1-1/4 in.
+
+The molded rubber barrel dampens noise, ribs inside increase the tumbling action, and the Sure-Seal closure keeps slurry where it belongs. The base measures 6 in by 9.5 in.', features = '["Molded rubber barrel reduces noise", "Sure-Seal closure", "Single 3 lb barrel, stones up to 1-1/4\\"", "Special ribs increase tumbling action"]', included = '["One 3 lb capacity molded rubber barrel with Sure-Seal closure"]', specs = '{"Base dimensions": "6\\" W x 9.5\\" L", "Barrel inside depth": "4-1/8\\"", "Barrel inside diameter": "3-7/8\\"", "Barrel capacity": "3 lb"}', warranty = NULL WHERE id = 'lortone-3a-rock-tumbler';
+UPDATE products SET blurb = 'The Covington Saw Power Feed Replacement Kit restores automatic feed on a Covington saw.
+
+The kit for the 10 in trim saw and 12 to 16 in slab saws contains the feed motor, a lead screw with over-running clutch and the cut-off switch. A separate configuration for 18 to 24 in slab saws supplies the lead screw, gear, clutch, worm shaft and pulley, so check that you are ordering the one that matches your saw.', features = '["10\\" trim saw & 12\\"-16\\" slab saw kit: motor, lead screw, cut-off switch", "18\\"-24\\" slab saw kit: lead screw, gear, clutch, worm shaft, pulley"]', included = '["Power feed motor", "Lead screw with over-running clutch", "Cut-off switch"]', specs = '{}', warranty = NULL WHERE id = 'covington-saw-power-feed-replacement-kit';
+UPDATE products SET blurb = 'Covington Bronze Split Pliers are 6-1/4 in bronze pliers made for the 700 Series saws in 18, 20, 24, 30 and 36 in sizes.
+
+The set comes with a spring, pivot stud, lock nut, two fiber washers and two metal wear washers.', features = '["Bronze construction", "For Covington 700 Series Saws (18\\", 20\\", 24\\", 30\\", 36\\")"]', included = '["Spring", "Pivot stud", "Lock nut", "2 fiber washers", "2 metal wear washers"]', specs = '{"Length": "6-1/4\\"", "Material": "Bronze"}', warranty = NULL WHERE id = 'covington-bronze-split-pliers';
+UPDATE products SET blurb = 'The Covington Triple 1/2 Gallon Rolling Rock Tumbler is an American-made machine that turns three 1/2 gallon barrels at once.
+
+The barrels are solid Plastisol with raised ridges inside, riding on steel support shafts with nylon sleeve bearings in a powder-coated frame. The machine and the barrels are covered by a one-year warranty.', features = '["American made", "Powder coated frame", "Solid Plastisol barrels with raised interior ridges", "Steel support shafts", "Nylon sleeve bearings", "1 year warranty on machine and barrels"]', included = '["Three 1/2 gallon Plastisol barrels"]', specs = '{}', warranty = '1 year warranty on both machine and barrels' WHERE id = 'covington-triple-1-2-gallon-rolling-rock-tumbler';
+UPDATE products SET blurb = 'Rocks & Minerals, a DK Smithsonian Handbook by Chris and Helen Pellant, is a full-color identification guide.
+
+It covers rocks, minerals, gems and fossils, with photographs and written identification notes to help you tell one specimen from another in the field or at the bench.', features = '["Full-color photographs", "Expertly written identification descriptions", "Covers rocks, minerals, gems, and fossils", "By Chris & Helen Pellant"]', included = '[]', specs = '{"Publisher": "DK Smithsonian Handbooks", "Authors": "Chris & Helen Pellant"}', warranty = NULL WHERE id = 'rocks-minerals-by-dk-smithsonian-handbooks';
+UPDATE products SET blurb = 'The Covington Tumbler Motor is a stud-mount replacement motor rated at 1/12 hp and 1550 rpm.
+
+It runs on 110/220V, 50/60 Hz.', features = '["Stud mount", "1/12 hp", "1550 rpm", "110/220V, 50/60 Hz"]', included = '[]', specs = '{"Horsepower": "1/12 hp", "Speed": "1550 rpm", "Voltage": "110/220V, 50/60 Hz"}', warranty = NULL WHERE id = 'covington-tumbler-motor';
+UPDATE products SET blurb = 'Covington 6 Inch C-Brand Sintered Diamond Wheels are 6 in sintered diamond wheels, 1-1/2 in wide, with a 1 in bore.
+
+Grits available are 60/70, 140/170, 200/230, 400/500 and 600/800, covering everything from heavy shaping to pre-polish. Bushings are available for smaller shafts.', features = '["High quality", "Sintered diamond construction", "1-1/2\\" wide", "1\\" bore, bushings available for smaller shafts"]', included = '[]', specs = '{"Diameter": "6\\"", "Width": "1-1/2\\"", "Bore": "1\\"", "Grit options": "60/70, 140/170, 200/230, 400/500, 600/800"}', warranty = NULL WHERE id = 'covington-6-inch-c-brand-sintered-diamond-wheels';

@@ -1,0 +1,66 @@
+# Bedrock Lapidary: compression + caching for Hostinger (Apache/LiteSpeed).
+# Cuts page weight (the products API JSON, CSS/JS, and static assets)
+# without touching PHP/DB code. Safe to leave in even if a directive isn't
+# supported, each block is wrapped in an <IfModule> check.
+
+# SEO: product.php / category.php / guide.php / guide-post.php do the actual
+# work (dynamic title, meta description, canonical, Open Graph, and schema
+# pulled from the database), but every existing link on the site still
+# points to product.html?id=..., category.html?cat=..., guide.html, and
+# guide-post.html?slug=.... Rather than touch every link, these lines
+# transparently serve the .php file for the .html request so URLs never
+# change.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Send direct hits on the .php files to the canonical .html URL (keeps the query string).
+  RewriteCond %{THE_REQUEST} \s/(product|category|guide|guide-post)\.php[\s?]
+  RewriteRule ^(product|category|guide|guide-post)\.php$ /$1.html [R=301,L]
+
+  # /index.html duplicates the homepage: send it to /
+  RewriteCond %{THE_REQUEST} \s/index\.html[\s?]
+  RewriteRule ^index\.html$ / [R=301,L]
+
+  RewriteRule ^product\.html$ product.php [L]
+  RewriteRule ^category\.html$ category.php [L]
+  RewriteRule ^guide\.html$ guide.php [L]
+  RewriteRule ^guide-post\.html$ guide-post.php [L]
+
+  # /sitemap.xml -> sitemap.php (dynamic, always current with the DB)
+  RewriteRule ^sitemap\.xml$ sitemap.php [L]
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/xml
+  AddOutputFilterByType DEFLATE application/javascript text/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpg "access plus 30 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType text/css "access plus 7 days"
+  ExpiresByType application/javascript "access plus 7 days"
+  ExpiresByType text/javascript "access plus 7 days"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(jpg|jpeg|png|webp|svg|css|js)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
+
+# Baseline security headers (also clears the crawler's "missing header" warnings).
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Strict-Transport-Security "max-age=31536000"
+</IfModule>
