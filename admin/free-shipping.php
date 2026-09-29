@@ -15,6 +15,7 @@ $enabledCount = count(array_filter($products, fn($p) => $p['free_shipping']));
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Free Shipping - Bedrock Lapidary Admin</title>
 <link rel="stylesheet" href="admin-style.css?v=1790070146">
 </head>
@@ -51,7 +52,7 @@ $enabledCount = count(array_filter($products, fn($p) => $p['free_shipping']));
     </div>
 
     <div class="panel" style="padding:0;">
-      <table>
+      <div class="table-scroll"><table>
         <thead>
           <tr><th style="width:30px;"></th><th>Name</th><th>Category</th><th>Price</th><th>Free Shipping</th></tr>
         </thead>
@@ -72,7 +73,7 @@ $enabledCount = count(array_filter($products, fn($p) => $p['free_shipping']));
           </tr>
           <?php endforeach; ?>
         </tbody>
-      </table>
+      </table></div>
     </div>
 
     <div style="margin-top:20px;">

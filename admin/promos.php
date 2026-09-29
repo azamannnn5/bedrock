@@ -30,6 +30,7 @@ function promo_status($promo) {
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Promo Codes - Bedrock Lapidary Admin</title>
 <link rel="stylesheet" href="admin-style.css?v=1790088838">
 </head>
@@ -49,7 +50,7 @@ function promo_status($promo) {
   </div>
 
   <div class="panel" style="padding:0;">
-    <table>
+    <div class="table-scroll"><table>
       <thead>
         <tr><th>Code</th><th>Discount</th><th>Scope</th><th>Window</th><th>Status</th><th>Used</th><th></th></tr>
       </thead>
@@ -83,7 +84,7 @@ function promo_status($promo) {
           <tr><td colspan="7" style="text-align:center; color:var(--ink-soft); padding:24px;">No promo codes yet.</td></tr>
         <?php endif; ?>
       </tbody>
-    </table>
+    </table></div>
   </div>
 </div>
 

@@ -31,7 +31,7 @@ $navGroups = [
     <div class="brand">Bedrock <span>Lapidary</span> Admin</div>
     <div style="display:flex; align-items:center; gap:14px;">
       <a href="logout.php" class="logout">Log out (<?= htmlspecialchars($_SESSION['admin_username'] ?? '') ?>)</a>
-      <button class="admin-menu-toggle" id="admin-menu-toggle" type="button">Menu ▾</button>
+      <button class="admin-menu-toggle" id="admin-menu-toggle" type="button" aria-expanded="false" aria-controls="admin-nav"><span class="bars" id="admin-menu-icon">&#9776;</span> Menu</button>
     </div>
   </div>
   <nav class="admin-nav" id="admin-nav">
@@ -41,10 +41,19 @@ $navGroups = [
         <a href="<?= $href ?>" class="<?= $activePage === $key ? 'active' : '' ?>"><?= htmlspecialchars($label) ?></a>
       <?php endforeach; ?>
     <?php endforeach; ?>
+    <a href="logout.php" class="logout-link">Log out (<?= htmlspecialchars($_SESSION['admin_username'] ?? '') ?>)</a>
   </nav>
 </div>
 <script>
-  document.getElementById('admin-menu-toggle')?.addEventListener('click', () => {
-    document.getElementById('admin-nav').classList.toggle('open');
-  });
+  (function(){
+    var btn = document.getElementById('admin-menu-toggle');
+    var nav = document.getElementById('admin-nav');
+    var icon = document.getElementById('admin-menu-icon');
+    if (!btn || !nav) return;
+    btn.addEventListener('click', function(){
+      var open = nav.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      icon.innerHTML = open ? '&#10005;' : '&#9776;';
+    });
+  })();
 </script>

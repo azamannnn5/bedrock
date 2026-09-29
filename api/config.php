@@ -4,7 +4,7 @@
  *
  * PLACEHOLDER VALUES: everything in this file needs to be replaced with the
  * real values from your Hostinger hPanel once the domain and database exist.
- * See SETUP_HOSTINGER.md for exactly where each of these comes from.
+ * See docs/SETUP_HOSTINGER.md for exactly where each of these comes from.
  *
  * This file is included by every PHP script that needs the database or
  * email sending. Nothing here is executed on its own.

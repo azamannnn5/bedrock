@@ -29,6 +29,17 @@
   RewriteRule ^sitemap\.xml$ sitemap.php [L]
 </IfModule>
 
+# Never serve project/dev files (SQL dumps, notes, scripts) even if uploaded.
+<FilesMatch "\.(sql|md|py)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
 <IfModule mod_mime.c>
   AddType image/webp .webp
 </IfModule>

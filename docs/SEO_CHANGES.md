@@ -46,12 +46,12 @@
 - **Clean URLs**: all three assessments say not to rebuild them now, and I agree. The crawl shows the current URLs
   index fine, and rewriting every link and redirect without a staging server risks breaking a live site.
   Revisit after you see indexing data in Search Console.
-- **Review/rating markup**: none, as you said the reviews are not real.
+- **Review/rating markup**: none. The reviews system (tables, API, admin page) was removed entirely, so no review or rating data is stored, shown or marked up.
 - **Local SEO pages**: only if Bedrock has a real local presence.
 - **Vibratory tumbler page**: no such inventory.
 
 ## Still to do (cannot be done from code)
-- ~~Rewrite product descriptions~~ Done (2026-09-29): all 416 `blurb` values in `sql/content_updates/` and `content_updates_combined.sql` are now original text. Re-run those files (or the combined one) in phpMyAdmin after `seed_products.sql`. See `DESCRIPTION_REWRITE_NOTES.md` for what is still verbatim.
+- ~~Rewrite product descriptions~~ Done (2026-09-29): all product descriptions, features, included items and warranty text are original wording, in `sql/seed_products.sql` and `sql/content_updates_combined.sql`. The old vendor name was replaced with Bedrock Lapidary.
 - Validate keyword volumes in Keyword Planner and fill in `KEYWORD_MAP.md`.
 - Backlinks (none assessed by any of the audits): supplier/manufacturer listings, rockhounding clubs and forums, a Google Business Profile if eligible.
 - Page speed: median server response in the crawl was ~1 s. Ask Hostinger about caching (LiteSpeed cache) and check PageSpeed Insights.

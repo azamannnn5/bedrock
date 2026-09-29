@@ -18,7 +18,8 @@ a{ color:var(--green-d); }
 .admin-header .brand{ font-weight:700; font-size:18px; }
 .admin-header .brand span{ color:#7FC191; }
 .admin-header .logout{ color:rgba(255,255,255,.6); font-size:13px; text-decoration:underline; }
-.admin-menu-toggle{ display:none; background:none; border:1px solid rgba(255,255,255,.3); color:#fff; padding:6px 10px; border-radius:4px; font-size:13px; }
+.admin-menu-toggle{ display:none; align-items:center; gap:8px; background:none; border:1px solid rgba(255,255,255,.35); color:#fff; padding:9px 14px; border-radius:6px; font-size:15px; font-family:inherit; font-weight:600; cursor:pointer; }
+.admin-menu-toggle .bars{ font-size:20px; line-height:1; }
 
 .admin-nav{ display:flex; flex-wrap:wrap; gap:4px; margin-top:12px; }
 .admin-nav a{
@@ -66,7 +67,11 @@ td{ padding:10px 8px; border-bottom:1px solid var(--line); vertical-align:middle
 tr:hover td{ background:var(--green-wash); }
 img.thumb{ width:42px; height:42px; object-fit:cover; background:var(--green-wash); border-radius:4px; }
 
-.table-scroll{ overflow-x:auto; }
+.table-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.table-scroll > table{ min-width:680px; }
+.edit-card{ display:none; scroll-margin-top:12px; }
+.edit-card.open{ display:block; }
+.edit-card .modal-actions{ display:flex; justify-content:flex-end; gap:10px; padding:16px 0 0; border-top:1px solid var(--line); margin-top:8px; }
 
 .switch{ position:relative; display:inline-block; width:44px; height:24px; flex-shrink:0; }
 .switch input{ opacity:0; width:0; height:0; }
@@ -89,6 +94,9 @@ img.thumb{ width:42px; height:42px; object-fit:cover; background:var(--green-was
 .field .field-help{ font-size:12px; color:var(--ink-soft); font-weight:400; margin-top:4px; }
 .field input, .field select, .field textarea{ width:100%; border:1px solid var(--line); padding:10px 12px; font-size:14px; font-family:inherit; border-radius:4px; }
 .field textarea{ resize:vertical; }
+.field input[type=checkbox]{ width:auto; padding:0; margin:0 8px 0 0; vertical-align:middle; }
+.field label:has(input[type=checkbox]){ display:flex; align-items:flex-start; gap:8px; font-weight:600; line-height:1.4; }
+.field label:has(input[type=checkbox]) input{ margin:3px 0 0; flex-shrink:0; }
 
 .modal-backdrop{ display:none; position:fixed; inset:0; background:rgba(30,33,31,.5); z-index:100; align-items:center; justify-content:center; padding:40px 20px; }
 .modal-backdrop.open{ display:flex; }
@@ -111,7 +119,7 @@ img.thumb{ width:42px; height:42px; object-fit:cover; background:var(--green-was
 .alert-success{ background:var(--green-wash); color:var(--green-d); border:1px solid var(--green); }
 .alert-error{ background:#FCE8E6; color:var(--red); border:1px solid var(--red); }
 
-.login-wrap{ max-width:380px; margin:80px auto; background:var(--white); border:1px solid var(--line); padding:36px; border-radius:8px; }
+.login-wrap{ width:calc(100% - 32px); max-width:420px; margin:60px auto; background:var(--white); border:1px solid var(--line); padding:36px; border-radius:8px; }
 .login-wrap h1{ font-size:20px; margin:0 0 20px; text-align:center; }
 
 .section-cards{ display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:16px; margin-bottom:8px; }
@@ -123,11 +131,31 @@ img.thumb{ width:42px; height:42px; object-fit:cover; background:var(--green-was
 
 /* Mobile */
 @media (max-width: 900px){
-  .admin-menu-toggle{ display:block; }
-  .admin-nav{ display:none; flex-direction:column; }
+  body{ font-size:16px; }
+  .admin-header{ padding:12px 16px; }
+  .admin-header .brand{ font-size:17px; }
+  .admin-menu-toggle{ display:inline-flex; }
+  .admin-header .logout{ display:none; }
+  .admin-nav{ display:none; flex-direction:column; flex-wrap:nowrap; gap:2px; margin-top:12px; padding-top:8px; border-top:1px solid rgba(255,255,255,.15); }
   .admin-nav.open{ display:flex; }
+  .admin-nav a{ font-size:16px; padding:12px 12px; white-space:normal; }
+  .admin-nav .logout-link{ display:block; }
   .admin-wrap{ padding:20px 16px 48px; }
+  .admin-wrap h1{ font-size:24px; }
+  .panel{ padding:18px; }
   .form-row{ grid-template-columns:1fr; }
+  .toolbar > *{ flex:1 1 100%; }
   .toolbar input[type=search]{ width:100%; }
-  th, td{ font-size:13px; padding:8px 6px; }
+  .toolbar input[type=search], .toolbar select{ font-size:16px; padding:12px; }
+  .field input, .field select, .field textarea{ font-size:16px; padding:12px; }
+  .btn{ padding:12px 18px; font-size:15px; }
+  .btn-sm{ padding:8px 14px; font-size:14px; }
+  th, td{ font-size:14px; padding:10px 8px; }
+  .variant-editor{ overflow-x:auto; }
+  .variant-editor-row, .variant-editor-head{ min-width:560px; }
+  .login-wrap{ margin:40px auto; padding:28px 22px; }
+  .login-wrap h1{ font-size:22px; }
+}
+@media (min-width: 901px){
+  .admin-nav .logout-link{ display:none; }
 }

@@ -70,27 +70,6 @@ CREATE TABLE IF NOT EXISTS product_variants (
 
 CREATE INDEX idx_variants_product ON product_variants(product_id);
 
--- ----------------------------------------------------------------------------
--- Reviews: real customer review text pulled from the source catalog, one row
--- per review. Replaces the old client-side synthetic review generator in
--- catalog.js (REVIEW_LINES), which reused ~7 canned lines across every
--- product and wasn't tied to anything real.
--- ----------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS reviews (
-  id            INT AUTO_INCREMENT PRIMARY KEY,
-  product_id    VARCHAR(120)  NOT NULL,
-  author        VARCHAR(150)  NOT NULL,
-  rating        DECIMAL(2,1)  NOT NULL,
-  body          TEXT          NOT NULL,
-  source        VARCHAR(50)   NOT NULL DEFAULT 'lapidarymart.com',
-  status        ENUM('pending','approved','rejected') NOT NULL DEFAULT 'approved',
-  created_at    TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_reviews_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE INDEX idx_reviews_product ON reviews(product_id);
-CREATE INDEX idx_reviews_status ON reviews(product_id, status);
-CREATE INDEX idx_products_featured ON products(featured);
 
 -- ----------------------------------------------------------------------------
 -- Promo codes: one system backs both the "10% off first order" popup code

@@ -5,7 +5,7 @@ $activePage = 'products';
 $db = get_db();
 $categories = $db->query("SELECT slug, label FROM categories ORDER BY label")->fetchAll();
 $products = $db->query("SELECT * FROM products ORDER BY name")->fetchAll();
-$vendors = $db->query("SELECT name FROM vendors ORDER BY name")->fetchAll();
+$vendors = $db->query("SELECT name FROM vendors UNION SELECT DISTINCT vendor AS name FROM products WHERE vendor <> '' ORDER BY name")->fetchAll();
 
 $variantRows = $db->query("SELECT * FROM product_variants ORDER BY product_id, sort_order")->fetchAll();
 $variantsByProduct = [];
@@ -24,6 +24,7 @@ unset($_SESSION['flash']);
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Products - Bedrock Lapidary Admin</title>
 <link rel="stylesheet" href="admin-style.css?v=1790088838">
 </head>
@@ -50,7 +51,7 @@ unset($_SESSION['flash']);
   </div>
 
   <div class="panel" style="padding:0;">
-    <table>
+    <div class="table-scroll"><table>
       <thead>
         <tr>
           <th></th><th>Name</th><th>Category</th><th>Price</th><th>Variants</th><th>Stock</th>
@@ -73,18 +74,18 @@ unset($_SESSION['flash']);
         </tr>
         <?php endforeach; ?>
       </tbody>
-    </table>
+    </table></div>
   </div>
 </div>
 
-<!-- Add/Edit modal -->
-<div class="modal-backdrop" id="modal-backdrop">
-  <div class="modal">
-    <h2 id="modal-title" style="margin-top:0;">Edit Product</h2>
+<!-- Add/Edit card (sits at the bottom of the page; Edit scrolls here) -->
+<div class="admin-wrap" style="padding-top:0;">
+  <div class="panel edit-card" id="edit-card">
+    <h2 id="modal-title" style="margin-top:0; font-size:20px;">Edit Product</h2>
     <form id="product-form" method="post" action="product-save.php">
       <input type="hidden" name="original_id" id="f-original-id">
       <input type="hidden" name="variants" id="f-variants">
-      <div class="modal-body">
+      <div class="edit-card-body">
         <div class="form-row">
           <div class="field"><label>Product ID</label><input type="text" name="id" id="f-id" required></div>
         </div>
@@ -159,6 +160,12 @@ unset($_SESSION['flash']);
 <script>
 const PRODUCTS_DATA = <?= json_encode($products) ?>;
 
+function openEditCard(){
+  const card = document.getElementById('edit-card');
+  card.classList.add('open');
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 function findProduct(id){ return PRODUCTS_DATA.find(p => p.id === id); }
 
 document.getElementById('search').addEventListener('input', filterRows);
@@ -225,7 +232,7 @@ document.getElementById('btn-add').addEventListener('click', () => {
   document.getElementById('f-id').disabled = false;
   document.getElementById('variant-rows').innerHTML = '';
   addVariantRow();
-  document.getElementById('modal-backdrop').classList.add('open');
+  openEditCard();
 });
 
 document.querySelectorAll('.btn-edit').forEach(btn => {
@@ -246,7 +253,7 @@ document.querySelectorAll('.btn-edit').forEach(btn => {
     document.getElementById('f-best-seller').checked = !!Number(p.best_seller);
     document.getElementById('variant-rows').innerHTML = '';
     (p.variants && p.variants.length ? p.variants : [{sku: p.sku, price: p.price, sale_price: p.sale_price, stock: p.stock}]).forEach(addVariantRow);
-    document.getElementById('modal-backdrop').classList.add('open');
+    openEditCard();
   });
 });
 
@@ -266,10 +273,8 @@ document.querySelectorAll('.btn-delete').forEach(btn => {
 });
 
 document.getElementById('btn-cancel').addEventListener('click', () => {
-  document.getElementById('modal-backdrop').classList.remove('open');
-});
-document.getElementById('modal-backdrop').addEventListener('click', (e) => {
-  if (e.target.id === 'modal-backdrop') e.currentTarget.classList.remove('open');
+  document.getElementById('edit-card').classList.remove('open');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 </script>
 </body>

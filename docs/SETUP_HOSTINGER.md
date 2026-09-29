@@ -15,12 +15,15 @@ will work. Follow this in order.
 
 1. In hPanel, open **phpMyAdmin** for your new database.
 2. Click the **SQL** tab.
-3. Open `sql/schema.sql` from this project, copy its full contents, paste into phpMyAdmin, and run it.
-4. Then run `sql/seed_products.sql` (417 products, already containing the final rewritten Bedrock descriptions),
-   followed by `sql/seed_product_variants.sql` (variants). Always run them in this order: re-running
-   `seed_products.sql` clears variants, so re-run the variants file after it.
-5. Optional: `sql/content_updates_combined.sql` re-applies the same descriptions and is safe to run at any time.
-6. Confirm it worked: the `products` table should have 417 rows.
+3. Run these files from the `sql/` folder, in this order (open each, copy the full contents, paste, run):
+   1. `schema.sql`
+   2. `patches_combined.sql` (adds guides, variants and other tables and columns; safe to re-run)
+   3. `seed_products.sql` (417 products with the final Bedrock descriptions)
+   4. `seed_product_variants.sql` (variants; re-running `seed_products.sql` clears them, so run this after it)
+   5. `content_updates_combined.sql` (re-applies the descriptions, fixes vendors, fills the vendor list)
+   6. `seo/guides_seo_batch_01.sql` (buying guides)
+4. Confirm it worked: the `products` table should have 417 rows and there should be no `reviews` table.
+5. Updating a site that is already live: run only `sql/content_updates_combined.sql`.
 
 ## 3. Fill in `api/config.php`
 
@@ -43,7 +46,7 @@ public_html/
   assets/
   api/
   admin/
-  sql/            (safe to leave, or delete after running the SQL once)
+  sql/, docs/, tools/   (blocked from the web; safe to leave, or keep them out of public_html)
 ```
 
 ## 5. Set up real email sending (once you have the domain)
