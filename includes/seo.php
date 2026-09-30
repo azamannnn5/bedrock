@@ -41,13 +41,13 @@ function bl_placeholder_uri() {
 function bl_img($id, $name, $class = '', $eager = false, $sizes = '(max-width: 600px) 46vw, 300px') {
     $enc = rawurlencode($id);
     $base = 'assets/img/products/';
-    $jpg  = $base . $enc . '.jpg';
+    $jpg  = '/' . $base . $enc . '.jpg';
     if (!file_exists(__DIR__ . '/../' . $base . $id . '.jpg')) {
         // No photo uploaded yet: never point crawlers at a URL that 404s.
         return '<img class="' . bl_e(trim($class . ' img-placeholder')) . '" src="' . bl_e(bl_placeholder_uri()) . '" width="200" height="200" alt="' . bl_e($name) . '" loading="lazy" decoding="async">';
     }
-    $w400 = $base . 'w400/' . $enc . '.webp';
-    $w800 = $base . 'w800/' . $enc . '.webp';
+    $w400 = '/' . $base . 'w400/' . $enc . '.webp';
+    $w800 = '/' . $base . 'w800/' . $enc . '.webp';
     return '<img class="' . bl_e($class) . '" src="' . $w400 . '" srcset="' . $w400 . ' 400w, ' . $w800 . ' 800w" sizes="' . bl_e($sizes) . '"'
         . ' width="400" height="400" alt="' . bl_e($name) . '" '
         . ($eager ? 'fetchpriority="high"' : 'loading="lazy"') . ' decoding="async"'
@@ -62,7 +62,7 @@ function bl_card($p, $eager = false) {
     $price = $sale
         ? '<span class="price">' . bl_money($p['sale_price']) . '</span><span class="price-was">' . bl_money($p['price']) . '</span>'
         : '<span class="price">' . bl_money($p['price']) . '</span>';
-    return '<a href="product.html?id=' . bl_e($p['id']) . '" class="product-card">'
+    return '<a href="/product/' . bl_e($p['id']) . '" class="product-card">'
         . '<div class="thumb"><div class="tag-stack">' . $best . $tag . '</div>' . bl_img($p['id'], $p['name'], '', $eager) . '</div>'
         . '<div class="body"><div class="vendor">' . bl_e($p['vendor']) . '</div><h3>' . bl_e($p['name']) . '</h3>'
         . '<div class="price-row">' . $price . '</div></div></a>';
@@ -463,7 +463,7 @@ function bl_return_policy_schema($siteUrl) {
         'merchantReturnDays' => 30,
         'returnMethod' => 'https://schema.org/ReturnByMail',
         'returnFees' => 'https://schema.org/ReturnShippingFees',
-        'merchantReturnLink' => $siteUrl . '/returns.html',
+        'merchantReturnLink' => $siteUrl . '/returns',
     ];
 }
 

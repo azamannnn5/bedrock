@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       searchResults.innerHTML = matches.map(p => `
-        <a href="product.html?id=${p.id}" class="search-live-row">
+        <a href="/product/${p.id}" class="search-live-row">
           <span class="search-live-thumb">${productImgTag(p, '')}</span>
           <span class="search-live-info">
             <span class="search-live-name">${escHTML(p.name)}</span>
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const q = searchForm.querySelector('input').value.trim();
       if (q) {
-        window.location.href = 'category.html?q=' + encodeURIComponent(q);
+        window.location.href = '/category?q=' + encodeURIComponent(q);
       }
     });
   }
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cartButton = document.getElementById('cart-button');
   if (cartButton) {
     cartButton.addEventListener('click', () => {
-      window.location.href = 'cart.html';
+      window.location.href = '/cart';
     });
   }
 });

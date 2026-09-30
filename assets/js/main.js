@@ -120,7 +120,7 @@ function initDiscountPopup(){
 
     if (frequency !== 'every_visit' && storage.getItem(storageKey)) return;
 
-    fetch('api/active-popup-promo.php').then(r => r.json()).then(promo => {
+    fetch('/api/active-popup-promo.php').then(r => r.json()).then(promo => {
       showDiscountPopup(promo.active ? promo.discountPct : null, delayMs, () => {
         if (frequency !== 'every_visit') storage.setItem(storageKey, '1');
       });
@@ -171,7 +171,7 @@ function showDiscountPopup(discountPct, delayMs, markShown){
     btn.disabled = true;
     btn.textContent = 'Sending...';
 
-    fetch('api/popup-signup.php', {
+    fetch('/api/popup-signup.php', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ firstName, email })

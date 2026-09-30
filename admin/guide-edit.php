@@ -31,7 +31,7 @@ $g = $guide ?: [
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= $guide ? 'Edit' : 'Add' ?> Guide - Bedrock Lapidary Admin</title>
-<link rel="stylesheet" href="admin-style.css?v=1790088838">
+<link rel="stylesheet" href="admin-style.css?v=1790797840">
 </head>
 <body>
 <?php include 'header.php'; ?>
@@ -56,7 +56,7 @@ $g = $guide ?: [
         <div class="field">
           <label>URL slug</label>
           <input type="text" name="slug" id="f-slug" value="<?= htmlspecialchars($g['slug']) ?>" pattern="[a-z0-9-]+" required>
-          <div class="field-help">Lowercase letters, numbers, hyphens only. The guide's URL will be /guide-post.html?slug=&lt;this&gt;. Changing it breaks any links already pointing to the old one.</div>
+          <div class="field-help">Lowercase letters, numbers, hyphens only. The guide's URL will be /guides/&lt;this&gt;. Changing it breaks any links already pointing to the old one.</div>
         </div>
         <div class="field">
           <label>Badge / hero tag</label>

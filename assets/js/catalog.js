@@ -3,8 +3,8 @@
 // (api/products.php) instead of a bundled static file, so admin panel
 // edits appear for every visitor immediately, not just one browser.
 
-const IMG_BASE = 'assets/img/products/';
-const API_BASE = 'api/';
+const IMG_BASE = '/assets/img/products/';
+const API_BASE = '/api/';
 
 let PRODUCTS = [];
 let CATEGORIES = {};
@@ -141,7 +141,7 @@ function productCardHTML(p){
     ? `<span class="price">${money(p.sale)}</span><span class="price-was">${money(p.price)}</span>`
     : `<span class="price">${money(p.price)}</span>`;
   return `
-  <a href="product.html?id=${p.id}" class="product-card">
+  <a href="/product/${p.id}" class="product-card">
     <div class="thumb">
       <div class="tag-stack">${bestSellerHTML}${tagHTML}</div>
       ${productImgTag(p, '')}
@@ -199,14 +199,29 @@ function fetchProductPromoBanner(productId){
     .catch(() => { el.innerHTML = ''; el.style.display = 'none'; });
 }
 
-function renderProductDetail(){
+/**
+ * Route params for clean URLs: /product/<id>, /category/<cat>[/<type>].
+ * Falls back to the query string so legacy URLs and ?q= search still work.
+ */
+function routeParams(){
   const params = new URLSearchParams(window.location.search);
+  const parts = window.location.pathname.split('/').filter(Boolean).map(decodeURIComponent);
+  if (parts[0] === 'product' && parts[1]) params.set('id', parts[1]);
+  if (parts[0] === 'category' && parts[1]) {
+    params.set('cat', parts[1]);
+    if (parts[2]) params.set('type', parts[2]);
+  }
+  return params;
+}
+
+function renderProductDetail(){
+  const params = routeParams();
   const id = params.get('id');
   const p = id ? getProduct(id) : null;
   if (!p || !document.getElementById('pdp-title')) return; // server already rendered a not-found page
 
   document.getElementById('pdp-breadcrumb-cat').textContent = CATEGORIES[p.category];
-  document.getElementById('pdp-breadcrumb-cat').href = `category.html?cat=${p.category}`;
+  document.getElementById('pdp-breadcrumb-cat').href = `/category/${p.category}`;
   document.getElementById('pdp-breadcrumb-name').textContent = p.name;
 
   document.getElementById('pdp-gallery-main').innerHTML = productImgTag(p, 'pdp-photo', true);
@@ -268,7 +283,7 @@ function renderProductDetail(){
       ${specRows}
       <tr><td>Warranty</td><td>${escHTML(p.warranty)}</td></tr>
     </table>
-    <p style="margin-top:18px; font-size:17.6px;"><a href="returns.html">See our shipping &amp; returns policy →</a></p>
+    <p style="margin-top:18px; font-size:17.6px;"><a href="/returns">See our shipping &amp; returns policy →</a></p>
   `;
 
   // Recommendations
@@ -291,7 +306,7 @@ function renderProductDetail(){
 // Category page render
 // ---------------------------------------------------------------------------
 function renderCategoryPage(){
-  const params = new URLSearchParams(window.location.search);
+  const params = routeParams();
   const q = (params.get('q') || '').trim();
   const cat = params.get('cat') || 'saws';
 
@@ -317,7 +332,7 @@ function renderCategoryPage(){
 
   const introEl = document.getElementById('cat-intro-text');
   if (introEl && !q && introEl.dataset.ssr !== '1') {
-    fetch('api/content.php').then(r => r.json()).then(data => {
+    fetch('/api/content.php').then(r => r.json()).then(data => {
       const text = data.categoryContent && data.categoryContent[cat];
       if (text) {
         introEl.textContent = text;
@@ -334,7 +349,7 @@ function renderCategoryPage(){
   function draw(list){
     document.getElementById('cat-grid').innerHTML = list.length
       ? list.map(productCardHTML).join('')
-      : `<p style="color:var(--ink-soft);">No products matched. Try a different search term, or <a href="category.html?cat=saws">browse all categories</a>.</p>`;
+      : `<p style="color:var(--ink-soft);">No products matched. Try a different search term, or <a href="/category/saws">browse all categories</a>.</p>`;
     document.getElementById('cat-count').textContent = `${list.length} product${list.length===1?'':'s'}`;
   }
   // The server already rendered this exact grid; only redraw for search results or an empty grid.

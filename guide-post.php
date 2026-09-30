@@ -32,7 +32,7 @@ if ($post) {
     $pageTitle = htmlspecialchars($post['title']) . ' | Bedrock Lapidary';
     $descRaw = $post['meta_description'] ?: $post['excerpt'];
     $pageDesc = htmlspecialchars(mb_strlen($descRaw) > 160 ? mb_substr($descRaw, 0, 157) . '...' : $descRaw);
-    $canonical = $SITE_URL . '/guide-post.html?slug=' . urlencode($post['slug']);
+    $canonical = $SITE_URL . '/guides/' . rawurlencode($post['slug']);
     $robotsMeta = '';
     $ogImage = $SITE_URL . '/' . ltrim($post['featured_image'] ?: 'assets/img/hero/hero-stones.jpg', '/');
 
@@ -54,7 +54,7 @@ if ($post) {
         '@type' => 'BreadcrumbList',
         'itemListElement' => [
             ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $SITE_URL . '/'],
-            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Guides', 'item' => $SITE_URL . '/guide.html'],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Guides', 'item' => $SITE_URL . '/guides'],
             ['@type' => 'ListItem', 'position' => 3, 'name' => $post['title'], 'item' => $canonical],
         ],
     ];
@@ -63,7 +63,7 @@ if ($post) {
     header('X-Robots-Tag: noindex, follow');
     $pageTitle = 'Guide | Bedrock Lapidary';
     $pageDesc = 'Buying guides for lapidary and glass equipment from Bedrock Lapidary.';
-    $canonical = $SITE_URL . '/guide-post.html' . ($slug !== '' ? '?slug=' . urlencode($slug) : '');
+    $canonical = $SITE_URL . '/guides' . ($slug !== '' ? '/' . rawurlencode($slug) : '');
     $robotsMeta = '<meta name="robots" content="noindex, follow">';
     $ogImage = $SITE_URL . '/assets/img/hero/hero-stones.jpg';
     $articleSchema = null;
@@ -109,7 +109,7 @@ if ($post) {
   }
 }
 </script>
-<link rel="stylesheet" href="assets/css/style.css?v=1790088838">
+<link rel="stylesheet" href="/assets/css/style.css?v=1790797840">
 </head>
 <body>
 
@@ -134,73 +134,73 @@ if ($post) {
       </div>
       <ul>
         <li class="has-drop">
-          <a href="category.html?cat=grinding-polishing">Grinding &amp; Polishing</a>
+          <a href="/category/grinding-polishing">Grinding &amp; Polishing</a>
           <ul class="drop">
-            <li><a href="category.html?cat=grinding-polishing&amp;type=cabbing-machines">Cabbing Machines</a></li>
-            <li><a href="category.html?cat=grinding-polishing&amp;type=arbors">Arbors</a></li>
-            <li><a href="category.html?cat=grinding-polishing&amp;type=polishing-compounds">Polishing Compounds</a></li>
-            <li><a href="category.html?cat=grinding-polishing&amp;type=grinding-wheels">Grinding Wheels</a></li>
-            <li><a href="category.html?cat=grinding-polishing&amp;type=polishing-wheels">Polishing Wheels</a></li>
-            <li><a href="category.html?cat=grinding-polishing&amp;type=sanders">Sanders</a></li>
+            <li><a href="/category/grinding-polishing/cabbing-machines">Cabbing Machines</a></li>
+            <li><a href="/category/grinding-polishing/arbors">Arbors</a></li>
+            <li><a href="/category/grinding-polishing/polishing-compounds">Polishing Compounds</a></li>
+            <li><a href="/category/grinding-polishing/grinding-wheels">Grinding Wheels</a></li>
+            <li><a href="/category/grinding-polishing/polishing-wheels">Polishing Wheels</a></li>
+            <li><a href="/category/grinding-polishing/sanders">Sanders</a></li>
           </ul>
         </li>
         <li class="has-drop">
-          <a href="category.html?cat=glass">Glass</a>
+          <a href="/category/glass">Glass</a>
           <ul class="drop">
-            <li><a href="category.html?cat=glass">Bevelers</a></li>
-            <li><a href="category.html?cat=glass&amp;type=glass-cutters">Cutters</a></li>
-            <li><a href="category.html?cat=glass&amp;type=glass-grinders">Grinders</a></li>
-            <li><a href="category.html?cat=glass&amp;type=glass-lathes">Lathes</a></li>
-            <li><a href="category.html?cat=glass&amp;type=glass-polishers">Polishers</a></li>
+            <li><a href="/category/glass">Bevelers</a></li>
+            <li><a href="/category/glass/glass-cutters">Cutters</a></li>
+            <li><a href="/category/glass/glass-grinders">Grinders</a></li>
+            <li><a href="/category/glass/glass-lathes">Lathes</a></li>
+            <li><a href="/category/glass/glass-polishers">Polishers</a></li>
           </ul>
         </li>
         <li class="has-drop">
-          <a href="category.html?cat=lap-machines">Lap Machines</a>
+          <a href="/category/lap-machines">Lap Machines</a>
           <ul class="drop">
-            <li><a href="category.html?cat=lap-machines&amp;type=flat-lap-machines">Flat Lap Machines</a></li>
-            <li><a href="category.html?cat=lap-machines&amp;type=vibrating-lap-machines">Vibrating Lap Machines</a></li>
-            <li><a href="category.html?cat=lap-machines&amp;type=lap-disks">Lap Disks</a></li>
-            <li><a href="category.html?cat=lap-machines&amp;type=slant-cabbers">Slant Cabbers</a></li>
+            <li><a href="/category/lap-machines/flat-lap-machines">Flat Lap Machines</a></li>
+            <li><a href="/category/lap-machines/vibrating-lap-machines">Vibrating Lap Machines</a></li>
+            <li><a href="/category/lap-machines/lap-disks">Lap Disks</a></li>
+            <li><a href="/category/lap-machines/slant-cabbers">Slant Cabbers</a></li>
           </ul>
         </li>
         <li class="has-drop">
-          <a href="category.html?cat=saws">Saws</a>
+          <a href="/category/saws">Saws</a>
           <ul class="drop">
-            <li><a href="category.html?cat=saws&amp;type=slab-saws">Slab Saws</a></li>
-            <li><a href="category.html?cat=saws&amp;type=trim-saws">Trim Saws</a></li>
-            <li><a href="category.html?cat=saws&amp;type=band-saws">Band Saws</a></li>
-            <li><a href="category.html?cat=saws&amp;type=ring-saws">Ring Saws</a></li>
-            <li><a href="category.html?cat=saws&amp;type=saw-blades">Saw Blades</a></li>
+            <li><a href="/category/saws/slab-saws">Slab Saws</a></li>
+            <li><a href="/category/saws/trim-saws">Trim Saws</a></li>
+            <li><a href="/category/saws/band-saws">Band Saws</a></li>
+            <li><a href="/category/saws/ring-saws">Ring Saws</a></li>
+            <li><a href="/category/saws/saw-blades">Saw Blades</a></li>
           </ul>
         </li>
         <li class="has-drop">
-          <a href="category.html?cat=tumblers">Tumblers</a>
+          <a href="/category/tumblers">Tumblers</a>
           <ul class="drop">
-            <li><a href="category.html?cat=tumblers&amp;type=rotary-tumblers">Rotary Tumblers</a></li>
-            <li><a href="category.html?cat=tumblers&amp;type=tumbling-grit-polish">Grit &amp; Polish Kits</a></li>
-            <li><a href="category.html?cat=tumblers&amp;type=tumbling-media">Tumbling Media</a></li>
-            <li><a href="category.html?cat=tumblers&amp;type=tumbler-parts">Tumbler Parts</a></li>
-            <li><a href="category.html?cat=accessories&amp;type=tumbler-motors">Replacement Motors</a></li>
+            <li><a href="/category/tumblers/rotary-tumblers">Rotary Tumblers</a></li>
+            <li><a href="/category/tumblers/tumbling-grit-polish">Grit &amp; Polish Kits</a></li>
+            <li><a href="/category/tumblers/tumbling-media">Tumbling Media</a></li>
+            <li><a href="/category/tumblers/tumbler-parts">Tumbler Parts</a></li>
+            <li><a href="/category/accessories/tumbler-motors">Replacement Motors</a></li>
           </ul>
         </li>
         <li class="has-drop">
-          <a href="category.html?cat=supplies">Supplies</a>
+          <a href="/category/supplies">Supplies</a>
           <ul class="drop">
-            <li><a href="category.html?cat=supplies&amp;type=silicon-carbide-grit">Silicon Carbide Grit</a></li>
-            <li><a href="category.html?cat=supplies&amp;type=diamond-compounds">Diamond Compounds</a></li>
-            <li><a href="category.html?cat=supplies&amp;type=dop-wax">Dop Wax &amp; Sticks</a></li>
-            <li><a href="category.html?cat=supplies&amp;type=sanding-belts-discs">Sanding Belts &amp; Discs</a></li>
+            <li><a href="/category/supplies/silicon-carbide-grit">Silicon Carbide Grit</a></li>
+            <li><a href="/category/supplies/diamond-compounds">Diamond Compounds</a></li>
+            <li><a href="/category/supplies/dop-wax">Dop Wax &amp; Sticks</a></li>
+            <li><a href="/category/supplies/sanding-belts-discs">Sanding Belts &amp; Discs</a></li>
           </ul>
         </li>
         <li class="has-drop">
-          <a href="category.html?cat=tools">Tools</a>
+          <a href="/category/tools">Tools</a>
           <ul class="drop">
-            <li><a href="category.html?cat=tools">All Tools</a></li>
-            <li><a href="category.html?cat=accessories">Accessories</a></li>
+            <li><a href="/category/tools">All Tools</a></li>
+            <li><a href="/category/accessories">Accessories</a></li>
           </ul>
         </li>
-        <li><a href="category.html?cat=books">Books</a></li>
-        <li><a href="guide.html">Guides</a></li>
+        <li><a href="/category/books">Books</a></li>
+        <li><a href="/guides">Guides</a></li>
       </ul>
     </nav>
         <div class="header-actions">
@@ -226,19 +226,19 @@ if ($post) {
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <div class="container">
       <a href="/">Home</a><span class="sep">/</span>
-      <a href="guide.html">Guides</a>
+      <a href="/guides">Guides</a>
     </div>
   </nav>
   <div class="container" style="padding: 64px 0;">
     <h1>Guide not found</h1>
-    <p style="color:var(--ink-soft);">That guide doesn't exist or isn't published. <a href="guide.html">See all guides</a>.</p>
+    <p style="color:var(--ink-soft);">That guide doesn't exist or isn't published. <a href="/guides">See all guides</a>.</p>
   </div>
 <?php else: ?>
 
 <nav class="breadcrumb" aria-label="Breadcrumb">
   <div class="container">
     <a href="/">Home</a><span class="sep">/</span>
-    <a href="guide.html">Guides</a><span class="sep">/</span>
+    <a href="/guides">Guides</a><span class="sep">/</span>
     <span><?= htmlspecialchars($post['title']) ?></span>
   </div>
 </nav>
@@ -263,7 +263,7 @@ if ($post) {
       <?php endif; ?>
       <?php if ($categoryRow): ?>
       <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--line);">
-        <a href="category.html?cat=<?= urlencode($categoryRow['slug']) ?>" class="btn btn-block btn-sm">Shop <?= htmlspecialchars($categoryRow['label']) ?></a>
+        <a href="/category/<?= urlencode($categoryRow['slug']) ?>" class="btn btn-block btn-sm">Shop <?= htmlspecialchars($categoryRow['label']) ?></a>
       </div>
       <?php endif; ?>
     </aside>
@@ -282,23 +282,23 @@ if ($post) {
       <div>
         <h4>Shop</h4>
         <ul>
-          <li><a href="category.html?cat=saws">Saws</a></li>
-          <li><a href="category.html?cat=grinding-polishing">Grinding &amp; Polishing</a></li>
-          <li><a href="category.html?cat=lap-machines">Lap Machines</a></li>
-          <li><a href="category.html?cat=tumblers">Tumblers</a></li>
-          <li><a href="category.html?cat=glass">Glass Equipment</a></li>
-          <li><a href="category.html?cat=supplies">Supplies</a></li>
+          <li><a href="/category/saws">Saws</a></li>
+          <li><a href="/category/grinding-polishing">Grinding &amp; Polishing</a></li>
+          <li><a href="/category/lap-machines">Lap Machines</a></li>
+          <li><a href="/category/tumblers">Tumblers</a></li>
+          <li><a href="/category/glass">Glass Equipment</a></li>
+          <li><a href="/category/supplies">Supplies</a></li>
         </ul>
       </div>
       <div>
         <h4>Support</h4>
         <ul>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
-          <li><a href="returns.html">Shipping &amp; Returns</a></li>
-          <li><a href="privacy.html">Privacy Policy</a></li>
-          <li><a href="terms.html">Terms of Service</a></li>
-          <li><a href="guide.html">Buying Guides</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/contact">Contact Us</a></li>
+          <li><a href="/returns">Shipping &amp; Returns</a></li>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+          <li><a href="/guides">Buying Guides</a></li>
         </ul>
       </div>
       <div>
@@ -312,9 +312,9 @@ if ($post) {
   </div>
 </footer>
 
-<script src="assets/js/catalog.js?v=1790088838"></script>
-<script src="assets/js/cart.js?v=1790088838"></script>
-<script src="assets/js/main.js?v=1790088838"></script>
+<script src="/assets/js/catalog.js?v=1790797840"></script>
+<script src="/assets/js/cart.js?v=1790797840"></script>
+<script src="/assets/js/main.js?v=1790797840"></script>
 <!-- Smartsupp Live Chat script -->
 <script type="text/javascript">
 var _smartsupp = _smartsupp || {};

@@ -3,27 +3,57 @@
 # without touching PHP/DB code. Safe to leave in even if a directive isn't
 # supported, each block is wrapped in an <IfModule> check.
 
-# SEO: product.php / category.php / guide.php / guide-post.php do the actual
-# work (dynamic title, meta description, canonical, Open Graph, and schema
-# pulled from the database), but every existing link on the site still
-# points to product.html?id=..., category.html?cat=..., guide.html, and
-# guide-post.html?slug=.... Rather than touch every link, these lines
-# transparently serve the .php file for the .html request so URLs never
-# change.
+# Clean URLs (no extensions, no query strings):
+#   /product/<id>   /category/<cat>   /category/<cat>/<type>
+#   /guides   /guides/<slug>   /about /contact /cart /checkout /privacy /terms /returns /warranties
+# product.php / category.php / guide.php / guide-post.php do the real work
+# (title, meta, canonical, schema from the database); the rules below map the
+# clean URLs onto them. Old .html / .php / ?query URLs 301 to the clean ones.
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  # Send direct hits on the .php files to the canonical .html URL (keeps the query string).
-  RewriteCond %{THE_REQUEST} \s/(product|category|guide|guide-post)\.php[\s?]
-  RewriteRule ^(product|category|guide|guide-post)\.php$ /$1.html [R=301,L]
 
-  # /index.html duplicates the homepage: send it to /
+  # ---- 1. Legacy URLs -> clean URLs (301). THE_REQUEST makes sure only real
+  # browser requests match, never the internal rewrites below (no loops).
+  RewriteCond %{THE_REQUEST} \s/product\.(?:html|php)[\s?]
+  RewriteCond %{QUERY_STRING} (?:^|&)id=([^&]+)
+  RewriteRule ^product\.(?:html|php)$ /product/%1? [R=301,L]
+
+  RewriteCond %{THE_REQUEST} \s/category\.(?:html|php)[\s?]
+  RewriteCond %{QUERY_STRING} ^cat=([^&]+)&type=([^&]+)$
+  RewriteRule ^category\.(?:html|php)$ /category/%1/%2? [R=301,L]
+
+  RewriteCond %{THE_REQUEST} \s/category\.(?:html|php)[\s?]
+  RewriteCond %{QUERY_STRING} ^cat=([^&]+)$
+  RewriteRule ^category\.(?:html|php)$ /category/%1? [R=301,L]
+
+  RewriteCond %{THE_REQUEST} \s/category\.(?:html|php)[\s?]
+  RewriteRule ^category\.(?:html|php)$ /category [R=301,L]
+
+  RewriteCond %{THE_REQUEST} \s/guide-post\.(?:html|php)[\s?]
+  RewriteCond %{QUERY_STRING} (?:^|&)slug=([^&]+)
+  RewriteRule ^guide-post\.(?:html|php)$ /guides/%1? [R=301,L]
+
+  RewriteCond %{THE_REQUEST} \s/guide\.(?:html|php)[\s?]
+  RewriteRule ^guide\.(?:html|php)$ /guides [R=301,L]
+
   RewriteCond %{THE_REQUEST} \s/index\.html[\s?]
   RewriteRule ^index\.html$ / [R=301,L]
 
-  RewriteRule ^product\.html$ product.php [L]
-  RewriteRule ^category\.html$ category.php [L]
-  RewriteRule ^guide\.html$ guide.php [L]
-  RewriteRule ^guide-post\.html$ guide-post.php [L]
+  RewriteCond %{THE_REQUEST} \s/(?:about|contact|cart|checkout|privacy|terms|returns|warranties)\.html[\s?]
+  RewriteRule ^(about|contact|cart|checkout|privacy|terms|returns|warranties)\.html$ /$1 [R=301,L]
+
+  # ---- 2. Trailing slash -> no trailing slash (one URL per page).
+  RewriteRule ^(product|category|guides)/(.+)/$ /$1/$2 [R=301,L]
+  RewriteRule ^(category|guides|about|contact|cart|checkout|privacy|terms|returns|warranties)/$ /$1 [R=301,L]
+
+  # ---- 3. Clean URLs -> real files (internal, URL in the browser never changes).
+  RewriteRule ^product/([^/]+)$ product.php?id=$1 [L,QSA]
+  RewriteRule ^category/([^/]+)/([^/]+)$ category.php?cat=$1&type=$2 [L,QSA]
+  RewriteRule ^category/([^/]+)$ category.php?cat=$1 [L,QSA]
+  RewriteRule ^category$ category.php [L,QSA]
+  RewriteRule ^guides/([^/]+)$ guide-post.php?slug=$1 [L,QSA]
+  RewriteRule ^guides$ guide.php [L,QSA]
+  RewriteRule ^(about|contact|cart|checkout|privacy|terms|returns|warranties)$ $1.html [L]
 
   # /sitemap.xml -> sitemap.php (dynamic, always current with the DB)
   RewriteRule ^sitemap\.xml$ sitemap.php [L]

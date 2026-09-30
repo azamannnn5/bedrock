@@ -14,13 +14,13 @@ $db = get_db();
 
 $staticPages = [
     ['loc' => '/', 'priority' => '1.0', 'changefreq' => 'weekly'],
-    ['loc' => '/about.html', 'priority' => '0.5', 'changefreq' => 'monthly'],
-    ['loc' => '/contact.html', 'priority' => '0.5', 'changefreq' => 'monthly'],
-    ['loc' => '/guide.html', 'priority' => '0.6', 'changefreq' => 'monthly'],
-    ['loc' => '/returns.html', 'priority' => '0.3', 'changefreq' => 'yearly'],
-    ['loc' => '/privacy.html', 'priority' => '0.2', 'changefreq' => 'yearly'],
-    ['loc' => '/terms.html', 'priority' => '0.2', 'changefreq' => 'yearly'],
-    ['loc' => '/warranties.html', 'priority' => '0.3', 'changefreq' => 'yearly'],
+    ['loc' => '/about', 'priority' => '0.5', 'changefreq' => 'monthly'],
+    ['loc' => '/contact', 'priority' => '0.5', 'changefreq' => 'monthly'],
+    ['loc' => '/guides', 'priority' => '0.6', 'changefreq' => 'monthly'],
+    ['loc' => '/returns', 'priority' => '0.3', 'changefreq' => 'yearly'],
+    ['loc' => '/privacy', 'priority' => '0.2', 'changefreq' => 'yearly'],
+    ['loc' => '/terms', 'priority' => '0.2', 'changefreq' => 'yearly'],
+    ['loc' => '/warranties', 'priority' => '0.3', 'changefreq' => 'yearly'],
 ];
 
 $categories = $db->query("SELECT slug FROM categories")->fetchAll();
@@ -28,7 +28,7 @@ $products = $db->query("SELECT id, updated_at FROM products WHERE stock != 'out'
 $typeUrls = [];
 foreach (bl_all_types() as $t) {
     if (bl_type_indexable(count(bl_type_products($db, $t[0], $t[1])))) {
-        $typeUrls[] = '/category.html?cat=' . urlencode($t[0]) . '&type=' . urlencode($t[1]);
+        $typeUrls[] = '/category/' . rawurlencode($t[0]) . '/' . rawurlencode($t[1]);
     }
 }
 $guides = $db->query("SELECT slug, updated_at FROM guide_posts WHERE published = 1")->fetchAll();
@@ -45,7 +45,7 @@ foreach ($staticPages as $p) {
 }
 
 foreach ($categories as $c) {
-    $loc = $SITE_URL . '/category.html?cat=' . urlencode($c['slug']);
+    $loc = $SITE_URL . '/category/' . rawurlencode($c['slug']);
     echo "  <url>\n";
     echo "    <loc>" . htmlspecialchars($loc) . "</loc>\n";
     echo "    <changefreq>weekly</changefreq>\n";
@@ -62,7 +62,7 @@ foreach ($typeUrls as $tu) {
 }
 
 foreach ($products as $p) {
-    $loc = $SITE_URL . '/product.html?id=' . urlencode($p['id']);
+    $loc = $SITE_URL . '/product/' . rawurlencode($p['id']);
     $lastmod = $p['updated_at'] ? date('c', strtotime($p['updated_at'])) : null;
     echo "  <url>\n";
     echo "    <loc>" . htmlspecialchars($loc) . "</loc>\n";
@@ -78,7 +78,7 @@ foreach ($products as $p) {
 }
 
 foreach ($guides as $g) {
-    $loc = $SITE_URL . '/guide-post.html?slug=' . urlencode($g['slug']);
+    $loc = $SITE_URL . '/guides/' . rawurlencode($g['slug']);
     $lastmod = $g['updated_at'] ? date('c', strtotime($g['updated_at'])) : null;
     echo "  <url>\n";
     echo "    <loc>" . htmlspecialchars($loc) . "</loc>\n";

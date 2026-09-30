@@ -14,14 +14,14 @@ unset($_SESSION['flash']);
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Guides - Bedrock Lapidary Admin</title>
-<link rel="stylesheet" href="admin-style.css?v=1790088838">
+<link rel="stylesheet" href="admin-style.css?v=1790797840">
 </head>
 <body>
 <?php include 'header.php'; ?>
 
 <div class="admin-wrap">
   <h1>Guides</h1>
-  <p class="subtitle"><?= count($guides) ?> guide<?= count($guides) === 1 ? '' : 's' ?>. Published guides appear on the live site at /guide.html; unpublished ones are saved but hidden from visitors.</p>
+  <p class="subtitle"><?= count($guides) ?> guide<?= count($guides) === 1 ? '' : 's' ?>. Published guides appear on the live site at /guides; unpublished ones are saved but hidden from visitors.</p>
 
   <?php if ($flash): ?>
     <div class="alert alert-<?= $flash['type'] ?>"><?= htmlspecialchars($flash['message']) ?></div>
@@ -41,7 +41,7 @@ unset($_SESSION['flash']);
       <tbody id="guide-rows">
         <?php foreach ($guides as $g): ?>
         <tr data-title="<?= htmlspecialchars(strtolower($g['title'])) ?>">
-          <td><?= htmlspecialchars($g['title']) ?><div style="color:var(--ink-soft); font-size:12px;">/guide-post.html?slug=<?= htmlspecialchars($g['slug']) ?></div></td>
+          <td><?= htmlspecialchars($g['title']) ?><div style="color:var(--ink-soft); font-size:12px;">/guides/<?= htmlspecialchars($g['slug']) ?></div></td>
           <td><?= htmlspecialchars($g['category_link'] ?: '—') ?></td>
           <td><?= $g['published'] ? '<span style="color:var(--green-d); font-weight:600;">Published</span>' : '<span style="color:var(--ink-soft);">Draft</span>' ?></td>
           <td><?= htmlspecialchars(date('M j, Y', strtotime($g['updated_at']))) ?></td>

@@ -15,7 +15,7 @@ if ($catSlug !== '') {
 
 // Renamed type keys: permanent redirect to the new URL.
 if ($catSlug !== '' && $typeKey !== '' && ($newKey = bl_type_legacy($catSlug, $typeKey))) {
-    header('Location: ' . $SITE_URL . '/category.html?cat=' . urlencode($catSlug) . '&type=' . urlencode($newKey), true, 301);
+    header('Location: ' . $SITE_URL . '/category/' . rawurlencode($catSlug) . '/' . rawurlencode($newKey), true, 301);
     exit;
 }
 
@@ -39,7 +39,7 @@ if ($searchQ !== '' ) {
     $mode = 'search';
     $pageTitle = 'Search results | Bedrock Lapidary';
     $pageDesc = 'Search results at Bedrock Lapidary.';
-    $canonical = $SITE_URL . '/category.html';
+    $canonical = $SITE_URL . '/category';
     $robotsMeta = '<meta name="robots" content="noindex, follow">';
     $h1 = 'Search results';
 } elseif ($categoryRow) {
@@ -64,7 +64,7 @@ if ($searchQ !== '' ) {
             $tips = $typeDef[7];
             $typeGuideSlugs = $typeDef[8];
             if (!bl_type_indexable(count($items))) { $robotsMeta = '<meta name="robots" content="noindex, follow">'; }
-            $canonical = $SITE_URL . '/category.html?cat=' . urlencode($catSlug) . '&type=' . urlencode($typeKey);
+            $canonical = $SITE_URL . '/category/' . rawurlencode($catSlug) . '/' . rawurlencode($typeKey);
             $typeIds = array_map(function ($p) { return $p['id']; }, $items);
             foreach ($types as $k => $d) { if ($k !== $typeKey) { $siblingTypes[$k] = $d; } }
         }
@@ -78,7 +78,7 @@ if ($searchQ !== '' ) {
         $pageTitle = bl_e(bl_title($seo['title']));
         $summary = bl_collection_summary($items);
         $pageDescRaw = $seo['desc'];
-        $canonical = $SITE_URL . '/category.html?cat=' . urlencode($catSlug);
+        $canonical = $SITE_URL . '/category/' . rawurlencode($catSlug);
         $intro = $seo['intro'];
         try {
             $cs = $db->prepare("SELECT description FROM category_content WHERE category_slug = ?");
@@ -110,7 +110,7 @@ if ($searchQ !== '' ) {
 
         $listEls = [];
         foreach (array_slice($items, 0, 60) as $i => $p) {
-            $listEls[] = ['@type' => 'ListItem', 'position' => $i + 1, 'url' => $SITE_URL . '/product.html?id=' . urlencode($p['id']), 'name' => $p['name']];
+            $listEls[] = ['@type' => 'ListItem', 'position' => $i + 1, 'url' => $SITE_URL . '/product/' . rawurlencode($p['id']), 'name' => $p['name']];
         }
         $collectionSchema = [
             '@context' => 'https://schema.org',
@@ -120,7 +120,7 @@ if ($searchQ !== '' ) {
             'url' => $canonical,
             'mainEntity' => ['@type' => 'ItemList', 'numberOfItems' => count($items), 'itemListElement' => $listEls],
         ];
-        $crumbs = [['Home', $SITE_URL . '/'], [$catLabel, $SITE_URL . '/category.html?cat=' . urlencode($catSlug)]];
+        $crumbs = [['Home', $SITE_URL . '/'], [$catLabel, $SITE_URL . '/category/' . rawurlencode($catSlug)]];
         if ($mode === 'type') { $crumbs[] = [$typeDef[0], $canonical]; }
         $bl = [];
         foreach ($crumbs as $i => $c) { $bl[] = ['@type' => 'ListItem', 'position' => $i + 1, 'name' => $c[0], 'item' => $c[1]]; }
@@ -132,7 +132,7 @@ if ($mode === 'notfound') {
     bl_404();
     $pageTitle = 'Category Not Found | Bedrock Lapidary';
     $pageDesc = 'This category could not be found. Shop lapidary saws, grinders, tumblers and supplies at Bedrock Lapidary.';
-    $canonical = $SITE_URL . '/category.html';
+    $canonical = $SITE_URL . '/category';
     $robotsMeta = '<meta name="robots" content="noindex, follow">';
 }
 $ogImage = $SITE_URL . '/assets/img/hero/hero-stones.jpg';
@@ -161,7 +161,7 @@ $ogImage = $SITE_URL . '/assets/img/hero/hero-stones.jpg';
 <script type="application/ld+json"><?= json_encode($breadcrumbSchema, JSON_UNESCAPED_SLASHES) ?></script>
 <?php endif; ?>
 <script type="application/ld+json"><?= bl_org_schema_json($SITE_URL) ?></script>
-<link rel="stylesheet" href="assets/css/style.css?v=1790088838">
+<link rel="stylesheet" href="/assets/css/style.css?v=1790797840">
 <?= bl_img_fallback_script() ?></head>
 <body>
 
@@ -186,73 +186,73 @@ $ogImage = $SITE_URL . '/assets/img/hero/hero-stones.jpg';
       </div>
       <ul>
         <li class="has-drop">
-          <a href="category.html?cat=grinding-polishing">Grinding &amp; Polishing</a>
+          <a href="/category/grinding-polishing">Grinding &amp; Polishing</a>
           <ul class="drop">
-            <li><a href="category.html?cat=grinding-polishing&amp;type=cabbing-machines">Cabbing Machines</a></li>
-            <li><a href="category.html?cat=grinding-polishing&amp;type=arbors">Arbors</a></li>
-            <li><a href="category.html?cat=grinding-polishing&amp;type=polishing-compounds">Polishing Compounds</a></li>
-            <li><a href="category.html?cat=grinding-polishing&amp;type=grinding-wheels">Grinding Wheels</a></li>
-            <li><a href="category.html?cat=grinding-polishing&amp;type=polishing-wheels">Polishing Wheels</a></li>
-            <li><a href="category.html?cat=grinding-polishing&amp;type=sanders">Sanders</a></li>
+            <li><a href="/category/grinding-polishing/cabbing-machines">Cabbing Machines</a></li>
+            <li><a href="/category/grinding-polishing/arbors">Arbors</a></li>
+            <li><a href="/category/grinding-polishing/polishing-compounds">Polishing Compounds</a></li>
+            <li><a href="/category/grinding-polishing/grinding-wheels">Grinding Wheels</a></li>
+            <li><a href="/category/grinding-polishing/polishing-wheels">Polishing Wheels</a></li>
+            <li><a href="/category/grinding-polishing/sanders">Sanders</a></li>
           </ul>
         </li>
         <li class="has-drop">
-          <a href="category.html?cat=glass">Glass</a>
+          <a href="/category/glass">Glass</a>
           <ul class="drop">
-            <li><a href="category.html?cat=glass">Bevelers</a></li>
-            <li><a href="category.html?cat=glass&amp;type=glass-cutters">Cutters</a></li>
-            <li><a href="category.html?cat=glass&amp;type=glass-grinders">Grinders</a></li>
-            <li><a href="category.html?cat=glass&amp;type=glass-lathes">Lathes</a></li>
-            <li><a href="category.html?cat=glass&amp;type=glass-polishers">Polishers</a></li>
+            <li><a href="/category/glass">Bevelers</a></li>
+            <li><a href="/category/glass/glass-cutters">Cutters</a></li>
+            <li><a href="/category/glass/glass-grinders">Grinders</a></li>
+            <li><a href="/category/glass/glass-lathes">Lathes</a></li>
+            <li><a href="/category/glass/glass-polishers">Polishers</a></li>
           </ul>
         </li>
         <li class="has-drop">
-          <a href="category.html?cat=lap-machines">Lap Machines</a>
+          <a href="/category/lap-machines">Lap Machines</a>
           <ul class="drop">
-            <li><a href="category.html?cat=lap-machines&amp;type=flat-lap-machines">Flat Lap Machines</a></li>
-            <li><a href="category.html?cat=lap-machines&amp;type=vibrating-lap-machines">Vibrating Lap Machines</a></li>
-            <li><a href="category.html?cat=lap-machines&amp;type=lap-disks">Lap Disks</a></li>
-            <li><a href="category.html?cat=lap-machines&amp;type=slant-cabbers">Slant Cabbers</a></li>
+            <li><a href="/category/lap-machines/flat-lap-machines">Flat Lap Machines</a></li>
+            <li><a href="/category/lap-machines/vibrating-lap-machines">Vibrating Lap Machines</a></li>
+            <li><a href="/category/lap-machines/lap-disks">Lap Disks</a></li>
+            <li><a href="/category/lap-machines/slant-cabbers">Slant Cabbers</a></li>
           </ul>
         </li>
         <li class="has-drop">
-          <a href="category.html?cat=saws">Saws</a>
+          <a href="/category/saws">Saws</a>
           <ul class="drop">
-            <li><a href="category.html?cat=saws&amp;type=slab-saws">Slab Saws</a></li>
-            <li><a href="category.html?cat=saws&amp;type=trim-saws">Trim Saws</a></li>
-            <li><a href="category.html?cat=saws&amp;type=band-saws">Band Saws</a></li>
-            <li><a href="category.html?cat=saws&amp;type=ring-saws">Ring Saws</a></li>
-            <li><a href="category.html?cat=saws&amp;type=saw-blades">Saw Blades</a></li>
+            <li><a href="/category/saws/slab-saws">Slab Saws</a></li>
+            <li><a href="/category/saws/trim-saws">Trim Saws</a></li>
+            <li><a href="/category/saws/band-saws">Band Saws</a></li>
+            <li><a href="/category/saws/ring-saws">Ring Saws</a></li>
+            <li><a href="/category/saws/saw-blades">Saw Blades</a></li>
           </ul>
         </li>
         <li class="has-drop">
-          <a href="category.html?cat=tumblers">Tumblers</a>
+          <a href="/category/tumblers">Tumblers</a>
           <ul class="drop">
-            <li><a href="category.html?cat=tumblers&amp;type=rotary-tumblers">Rotary Tumblers</a></li>
-            <li><a href="category.html?cat=tumblers&amp;type=tumbling-grit-polish">Grit &amp; Polish Kits</a></li>
-            <li><a href="category.html?cat=tumblers&amp;type=tumbling-media">Tumbling Media</a></li>
-            <li><a href="category.html?cat=tumblers&amp;type=tumbler-parts">Tumbler Parts</a></li>
-            <li><a href="category.html?cat=accessories&amp;type=tumbler-motors">Replacement Motors</a></li>
+            <li><a href="/category/tumblers/rotary-tumblers">Rotary Tumblers</a></li>
+            <li><a href="/category/tumblers/tumbling-grit-polish">Grit &amp; Polish Kits</a></li>
+            <li><a href="/category/tumblers/tumbling-media">Tumbling Media</a></li>
+            <li><a href="/category/tumblers/tumbler-parts">Tumbler Parts</a></li>
+            <li><a href="/category/accessories/tumbler-motors">Replacement Motors</a></li>
           </ul>
         </li>
         <li class="has-drop">
-          <a href="category.html?cat=supplies">Supplies</a>
+          <a href="/category/supplies">Supplies</a>
           <ul class="drop">
-            <li><a href="category.html?cat=supplies&amp;type=silicon-carbide-grit">Silicon Carbide Grit</a></li>
-            <li><a href="category.html?cat=supplies&amp;type=diamond-compounds">Diamond Compounds</a></li>
-            <li><a href="category.html?cat=supplies&amp;type=dop-wax">Dop Wax &amp; Sticks</a></li>
-            <li><a href="category.html?cat=supplies&amp;type=sanding-belts-discs">Sanding Belts &amp; Discs</a></li>
+            <li><a href="/category/supplies/silicon-carbide-grit">Silicon Carbide Grit</a></li>
+            <li><a href="/category/supplies/diamond-compounds">Diamond Compounds</a></li>
+            <li><a href="/category/supplies/dop-wax">Dop Wax &amp; Sticks</a></li>
+            <li><a href="/category/supplies/sanding-belts-discs">Sanding Belts &amp; Discs</a></li>
           </ul>
         </li>
         <li class="has-drop">
-          <a href="category.html?cat=tools">Tools</a>
+          <a href="/category/tools">Tools</a>
           <ul class="drop">
-            <li><a href="category.html?cat=tools">All Tools</a></li>
-            <li><a href="category.html?cat=accessories">Accessories</a></li>
+            <li><a href="/category/tools">All Tools</a></li>
+            <li><a href="/category/accessories">Accessories</a></li>
           </ul>
         </li>
-        <li><a href="category.html?cat=books">Books</a></li>
-        <li><a href="guide.html">Guides</a></li>
+        <li><a href="/category/books">Books</a></li>
+        <li><a href="/guides">Guides</a></li>
       </ul>
     </nav>
         <div class="header-actions">
@@ -279,11 +279,11 @@ $ogImage = $SITE_URL . '/assets/img/hero/hero-stones.jpg';
   <h1>Category not found</h1>
   <p style="max-width:60ch;">We couldn't find that category. Try one of these:</p>
   <ul>
-    <li><a href="category.html?cat=saws">Lapidary saws</a></li>
-    <li><a href="category.html?cat=grinding-polishing">Grinding &amp; polishing</a></li>
-    <li><a href="category.html?cat=lap-machines">Flat lap machines</a></li>
-    <li><a href="category.html?cat=tumblers">Rock tumblers</a></li>
-    <li><a href="category.html?cat=supplies">Supplies</a></li>
+    <li><a href="/category/saws">Lapidary saws</a></li>
+    <li><a href="/category/grinding-polishing">Grinding &amp; polishing</a></li>
+    <li><a href="/category/lap-machines">Flat lap machines</a></li>
+    <li><a href="/category/tumblers">Rock tumblers</a></li>
+    <li><a href="/category/supplies">Supplies</a></li>
     <li><a href="/">Back to the homepage</a></li>
   </ul>
 </div>
@@ -292,7 +292,7 @@ $ogImage = $SITE_URL . '/assets/img/hero/hero-stones.jpg';
   <div class="container">
     <a href="/">Home</a><span class="sep">/</span>
 <?php if ($mode === 'type'): ?>
-    <a href="category.html?cat=<?= bl_e(urlencode($catSlug)) ?>"><?= bl_e($catLabel) ?></a><span class="sep">/</span>
+    <a href="/category/<?= bl_e(urlencode($catSlug)) ?>"><?= bl_e($catLabel) ?></a><span class="sep">/</span>
     <span id="cat-breadcrumb"><?= bl_e($typeDef[0]) ?></span>
 <?php elseif ($mode === 'category'): ?>
     <span id="cat-breadcrumb"><?= bl_e($catLabel) ?></span>
@@ -316,10 +316,10 @@ $ogImage = $SITE_URL . '/assets/img/hero/hero-stones.jpg';
       <h2 class="subcat-title"><?= $mode === 'type' ? 'More ' . bl_e(strtolower($catLabel)) : 'Shop ' . bl_e(strtolower($catLabel)) . ' by type' ?></h2>
       <nav class="subcat-links" aria-label="<?= $mode === 'type' ? 'Related types' : 'Shop by type' ?>">
 <?php if ($mode === 'type'): ?>
-        <a href="category.html?cat=<?= bl_e(urlencode($catSlug)) ?>">All <?= bl_e($catLabel) ?></a>
+        <a href="/category/<?= bl_e(urlencode($catSlug)) ?>">All <?= bl_e($catLabel) ?></a>
 <?php endif; ?>
 <?php foreach ($siblingTypes as $k => $d): ?>
-        <a href="category.html?cat=<?= bl_e(urlencode($catSlug)) ?>&amp;type=<?= bl_e(urlencode($k)) ?>"><?= bl_e($d[0]) ?></a>
+        <a href="/category/<?= bl_e(urlencode($catSlug)) ?>&amp;type=<?= bl_e(urlencode($k)) ?>"><?= bl_e($d[0]) ?></a>
 <?php endforeach; ?>
       </nav>
 <?php endif; ?>
@@ -362,7 +362,7 @@ $ogImage = $SITE_URL . '/assets/img/hero/hero-stones.jpg';
         <h2>Related buying guides</h2>
         <ul>
 <?php foreach ($guides as $g): ?>
-          <li><a href="guide-post.html?slug=<?= bl_e(urlencode($g['slug'])) ?>"><?= bl_e($g['title']) ?></a></li>
+          <li><a href="/guides/<?= bl_e(urlencode($g['slug'])) ?>"><?= bl_e($g['title']) ?></a></li>
 <?php endforeach; ?>
         </ul>
       </section>
@@ -386,23 +386,23 @@ $ogImage = $SITE_URL . '/assets/img/hero/hero-stones.jpg';
       <div>
         <h4>Shop</h4>
         <ul>
-          <li><a href="category.html?cat=saws">Saws</a></li>
-          <li><a href="category.html?cat=grinding-polishing">Grinding &amp; Polishing</a></li>
-          <li><a href="category.html?cat=lap-machines">Lap Machines</a></li>
-          <li><a href="category.html?cat=tumblers">Tumblers</a></li>
-          <li><a href="category.html?cat=glass">Glass Equipment</a></li>
-          <li><a href="category.html?cat=supplies">Supplies</a></li>
+          <li><a href="/category/saws">Saws</a></li>
+          <li><a href="/category/grinding-polishing">Grinding &amp; Polishing</a></li>
+          <li><a href="/category/lap-machines">Lap Machines</a></li>
+          <li><a href="/category/tumblers">Tumblers</a></li>
+          <li><a href="/category/glass">Glass Equipment</a></li>
+          <li><a href="/category/supplies">Supplies</a></li>
         </ul>
       </div>
       <div>
         <h4>Support</h4>
         <ul>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
-          <li><a href="returns.html">Shipping &amp; Returns</a></li>
-          <li><a href="privacy.html">Privacy Policy</a></li>
-          <li><a href="terms.html">Terms of Service</a></li>
-          <li><a href="guide.html">Buying Guides</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/contact">Contact Us</a></li>
+          <li><a href="/returns">Shipping &amp; Returns</a></li>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+          <li><a href="/guides">Buying Guides</a></li>
         </ul>
       </div>
       <div>
@@ -416,9 +416,9 @@ $ogImage = $SITE_URL . '/assets/img/hero/hero-stones.jpg';
   </div>
 </footer>
 
-<script src="assets/js/catalog.js?v=1790088838"></script>
-<script src="assets/js/cart.js?v=1790088838"></script>
-<script src="assets/js/main.js?v=1790088838"></script>
+<script src="/assets/js/catalog.js?v=1790797840"></script>
+<script src="/assets/js/cart.js?v=1790797840"></script>
+<script src="/assets/js/main.js?v=1790797840"></script>
 <?php if ($mode !== 'notfound'): ?><script>loadCatalog().then(renderCategoryPage);</script><?php endif; ?>
 <!-- Smartsupp Live Chat script -->
 <script type="text/javascript">
