@@ -109,7 +109,7 @@ DEALLOCATE PREPARE stmt;
 
 -- Free shipping threshold (replaces the old per-product free shipping system)
 INSERT INTO site_settings (setting_key, setting_value) VALUES
-('free_shipping_threshold', '175')
+('free_shipping_threshold', '299')
 ON DUPLICATE KEY UPDATE setting_key = setting_key;
 
 -- Real business info now that the domain and mailbox exist
@@ -143,7 +143,7 @@ SELECT * FROM (
 WHERE @payment_methods_untouched = 3;
 
 -- Banner message: update the old default text to match the new shipping policy
-UPDATE banner_messages SET message = 'Free Shipping on Orders $175+'
+UPDATE banner_messages SET message = 'Free Shipping on Orders $299+'
   WHERE message = 'Free Shipping on Select Products';
 -- ============================================================================
 -- Patch v4: widen products.id (and the two columns that reference it) from

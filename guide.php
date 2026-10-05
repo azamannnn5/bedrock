@@ -249,7 +249,7 @@ $itemListSchema = [
   </div>
 </footer>
 
-<script src="/assets/js/catalog.js?v=1790797840"></script>
+<script src="/assets/js/catalog.js?v=1791200208"></script>
 <script src="/assets/js/cart.js?v=1790797840"></script>
 <script src="/assets/js/main.js?v=1790797840"></script>
 <!-- Smartsupp Live Chat script -->

@@ -214,7 +214,7 @@
   </div>
 </footer>
 
-<script src="/assets/js/catalog.js?v=1790797840"></script>
+<script src="/assets/js/catalog.js?v=1791200208"></script>
 <script src="/assets/js/cart.js?v=1790797840"></script>
 <script src="/assets/js/main.js?v=1790797840"></script>
 <script>
@@ -310,7 +310,7 @@ function renderCheckoutPage(){
       </div>
     </div>`;
 
-  fetch('api/settings.php').then(r => r.json()).then(settings => {
+  fetch('/api/settings.php').then(r => r.json()).then(settings => {
     const threshold = settings.freeShippingThreshold;
     const noteEl = document.getElementById('checkout-shipping-note');
     if (!threshold || !noteEl) return;
@@ -323,7 +323,7 @@ function renderCheckoutPage(){
     }
   }).catch(() => {});
 
-  fetch('api/payment-methods.php')
+  fetch('/api/payment-methods.php')
     .then(res => res.json())
     .then(data => {
       const select = document.getElementById('f-payment');
@@ -373,7 +373,7 @@ function renderCheckoutPage(){
     msg.textContent = 'Checking code...';
     msg.style.color = 'var(--ink-soft)';
 
-    fetch('api/validate-promo.php', {
+    fetch('/api/validate-promo.php', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ code, email, productIds: lineItems.map(li => li.p.productId) })
@@ -417,7 +417,7 @@ function renderCheckoutPage(){
       items: lineItems.map(li => ({ id: li.p.id, name: li.p.name, unitPrice: li.unitPrice, quantity: li.qty })),
     };
 
-    fetch('api/submit-order.php', {
+    fetch('/api/submit-order.php', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(payload)

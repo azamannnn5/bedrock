@@ -242,11 +242,11 @@
   </div>
 </footer>
 
-<script src="/assets/js/catalog.js?v=1790797840"></script>
+<script src="/assets/js/catalog.js?v=1791200208"></script>
 <script src="/assets/js/cart.js?v=1790797840"></script>
 <script src="/assets/js/main.js?v=1790797840"></script>
 <script>
-fetch('api/content.php').then(r => r.json()).then(data => {
+fetch('/api/content.php').then(r => r.json()).then(data => {
   if (data.aboutPageContent && data.aboutPageContent.trim() !== '') {
     const el = document.getElementById('about-content-body');
     if (el) {

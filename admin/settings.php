@@ -110,7 +110,7 @@ unset($_SESSION['flash']);
       <div class="form-row full">
         <div class="field">
           <label>Free shipping on orders at or above this amount ($)</label>
-          <input type="number" step="0.01" min="0" name="free_shipping_threshold" value="<?= htmlspecialchars($s['free_shipping_threshold'] ?? '175') ?>">
+          <input type="number" step="0.01" min="0" name="free_shipping_threshold" value="<?= htmlspecialchars($s['free_shipping_threshold'] ?? '299') ?>">
           <div class="field-help">Shown to customers in the cart and at checkout. Below this amount, shipping is calculated after the order request comes in.</div>
         </div>
       </div>

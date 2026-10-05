@@ -246,7 +246,7 @@
   </div>
 </footer>
 
-<script src="/assets/js/catalog.js?v=1790797840"></script>
+<script src="/assets/js/catalog.js?v=1791200208"></script>
 <script src="/assets/js/cart.js?v=1790797840"></script>
 <script src="/assets/js/main.js?v=1790797840"></script>
 <script>
@@ -259,7 +259,7 @@ document.getElementById('contact-form')?.addEventListener('submit', (e) => {
   btn.disabled = true;
   btn.textContent = 'Sending...';
 
-  fetch('api/submit-contact.php', {
+  fetch('/api/submit-contact.php', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({

@@ -25,7 +25,7 @@ json_response([
     'popupDelaySeconds'       => (int)($settings['popup_delay_seconds'] ?? 4),
     'popupFrequency'          => $settings['popup_frequency'] ?? 'once_per_session',
     'heroPhotoPath'           => $settings['hero_photo_path'] ?? 'assets/img/hero/hero-stones.jpg',
-    'freeShippingThreshold'   => (float)($settings['free_shipping_threshold'] ?? 175),
+    'freeShippingThreshold'   => (float)($settings['free_shipping_threshold'] ?? 299),
     'social' => [
         'facebook'  => $settings['social_facebook'] ?? '',
         'instagram' => $settings['social_instagram'] ?? '',

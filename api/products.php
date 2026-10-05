@@ -13,7 +13,37 @@ api_headers();
 
 $db = get_db();
 
-function row_to_product($row) {
+/**
+ * Variants (grit / size / motor options) for every product, grouped by
+ * product id. Every product has at least one variant row; for a plain
+ * product the variant id equals the product id.
+ */
+function load_variants($db, $ids = null) {
+    $sql = "SELECT id, product_id, sku, price, sale_price, stock, option_label FROM product_variants";
+    $params = [];
+    if ($ids !== null) {
+        if (!$ids) return [];
+        $sql .= " WHERE product_id IN (" . implode(',', array_fill(0, count($ids), '?')) . ")";
+        $params = $ids;
+    }
+    $sql .= " ORDER BY product_id, sort_order, id";
+    $stmt = $db->prepare($sql);
+    $stmt->execute($params);
+    $out = [];
+    foreach ($stmt->fetchAll() as $v) {
+        $out[$v['product_id']][] = [
+            'id'    => $v['id'],
+            'sku'   => $v['sku'],
+            'price' => (float)$v['price'],
+            'sale'  => $v['sale_price'] !== null ? (float)$v['sale_price'] : null,
+            'stock' => $v['stock'],
+            'label' => $v['option_label'] !== null ? $v['option_label'] : '',
+        ];
+    }
+    return $out;
+}
+
+function row_to_product($row, $variants = []) {
     return [
         'id'           => $row['id'],
         'name'         => $row['name'],
@@ -33,6 +63,7 @@ function row_to_product($row) {
         'featured'     => (bool)$row['featured'],
         'bestSeller'   => (bool)$row['best_seller'],
         'recommends'   => json_decode($row['recommends'], true) ?: [],
+        'variants'     => $variants,
     ];
 }
 
@@ -43,7 +74,8 @@ if (isset($_GET['id'])) {
     if (!$row) {
         json_response(['error' => 'Product not found'], 404);
     }
-    json_response(row_to_product($row));
+    $vmap = load_variants($db, [$row['id']]);
+    json_response(row_to_product($row, $vmap[$row['id']] ?? []));
 }
 
 $categoryRows = $db->query("SELECT slug, label FROM categories")->fetchAll();
@@ -55,7 +87,8 @@ foreach ($categoryRows as $c) {
 $hideOutOfStock = get_setting('out_of_stock_behavior', 'show_grayed_out') === 'hide_completely';
 $productSql = "SELECT * FROM products" . ($hideOutOfStock ? " WHERE stock != 'out'" : "") . " ORDER BY name";
 $productRows = $db->query($productSql)->fetchAll();
-$products = array_map('row_to_product', $productRows);
+$vmap = load_variants($db);
+$products = array_map(function ($r) use ($vmap) { return row_to_product($r, $vmap[$r['id']] ?? []); }, $productRows);
 
 json_response([
     'products'      => $products,

@@ -34,26 +34,55 @@ if (!is_array($items) || count($items) === 0) {
 
 $db = get_db();
 
-// Recompute subtotal from the database's own prices, not whatever the client sent
+// Recompute subtotal from the database's own prices, not whatever the client sent.
+// Cart ids are variant ids (for plain products the variant id equals the product id).
 $subtotal = 0;
-$productIds = array_column($items, 'id');
-$placeholders = implode(',', array_fill(0, count($productIds), '?'));
-$stmt = $db->prepare("SELECT id, name, price, sale_price FROM products WHERE id IN ($placeholders)");
-$stmt->execute($productIds);
-$dbProducts = [];
+$cartIds = [];
+foreach ($items as $item) {
+    if (isset($item['id'])) $cartIds[] = (string)$item['id'];
+}
+$cartIds = array_values(array_unique($cartIds));
+if (!$cartIds) {
+    json_response(['success' => false, 'error' => 'Your cart is empty.'], 400);
+}
+$placeholders = implode(',', array_fill(0, count($cartIds), '?'));
+
+$dbItems = [];   // cart id => ['product_id','name','price','sale_price']
+$stmt = $db->prepare("SELECT v.id, v.product_id, v.price, v.sale_price, v.option_label, p.name
+                      FROM product_variants v JOIN products p ON p.id = v.product_id
+                      WHERE v.id IN ($placeholders)");
+$stmt->execute($cartIds);
 foreach ($stmt->fetchAll() as $row) {
-    $dbProducts[$row['id']] = $row;
+    $label = trim((string)$row['option_label']);
+    $dbItems[$row['id']] = [
+        'product_id' => $row['product_id'],
+        'name'       => $row['name'] . ($label !== '' ? ' - ' . $label : ''),
+        'price'      => $row['price'],
+        'sale_price' => $row['sale_price'],
+    ];
+}
+// Fallback for older carts / products without a variant row: match the product itself.
+$stmt = $db->prepare("SELECT id, name, price, sale_price FROM products WHERE id IN ($placeholders)");
+$stmt->execute($cartIds);
+foreach ($stmt->fetchAll() as $row) {
+    if (!isset($dbItems[$row['id']])) {
+        $dbItems[$row['id']] = [
+            'product_id' => $row['id'], 'name' => $row['name'],
+            'price' => $row['price'], 'sale_price' => $row['sale_price'],
+        ];
+    }
 }
 
 $verifiedItems = [];
 foreach ($items as $item) {
-    if (!isset($dbProducts[$item['id']])) continue;
-    $p = $dbProducts[$item['id']];
+    $cid = isset($item['id']) ? (string)$item['id'] : '';
+    if (!isset($dbItems[$cid])) continue;
+    $p = $dbItems[$cid];
     $unitPrice = $p['sale_price'] !== null ? (float)$p['sale_price'] : (float)$p['price'];
-    $qty = max(1, (int)$item['quantity']);
+    $qty = max(1, (int)($item['quantity'] ?? 1));
     $subtotal += $unitPrice * $qty;
     $verifiedItems[] = [
-        'product_id'   => $p['id'],
+        'product_id'   => $p['product_id'],
         'product_name' => $p['name'],
         'unit_price'   => $unitPrice,
         'quantity'     => $qty,

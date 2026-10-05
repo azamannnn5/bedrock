@@ -170,19 +170,19 @@ INSERT INTO site_settings (setting_key, setting_value) VALUES
 ('business_name', 'Bedrock Lapidary'),
 ('contact_email', 'contact@bedrocklapidary.com'),
 ('order_notification_email', 'contact@bedrocklapidary.com'),
-('phone_number', ''),
-('business_hours', ''),
+('phone_number', '+1 (313) 355-3129'),
+('business_hours', '9:00 AM-6:00 PM From Monday to Saturday..'),
 ('free_shipping_banner_text', 'Free Shipping on Select Products'),
 ('popup_delay_seconds', '4'),
 ('popup_frequency', 'once_per_session'),
-('social_facebook', ''),
+('social_facebook', 'https://www.facebook.com/share/1FiKkvTSpz/'),
 ('social_instagram', ''),
 ('social_youtube', ''),
 ('about_page_content', ''),
 ('order_email_footer_note', ''),
 ('out_of_stock_behavior', 'show_grayed_out'),
 ('hero_photo_path', 'assets/img/hero/hero-stones.jpg'),
-('free_shipping_threshold', '175')
+('free_shipping_threshold', '299')
 ON DUPLICATE KEY UPDATE setting_key = setting_key;
 
 -- ----------------------------------------------------------------------------
@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS banner_messages (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO banner_messages (message, display_seconds, active, sort_order) VALUES
-('Free Shipping on Orders $175+', 5, 1, 0);
+('Free Shipping on Orders $299+', 5, 1, 0);
 
 -- ----------------------------------------------------------------------------
 -- Payment methods: shown as options at checkout. Admin-managed instead of

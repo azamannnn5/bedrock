@@ -213,7 +213,7 @@
   </div>
 </footer>
 
-<script src="/assets/js/catalog.js?v=1790797840"></script>
+<script src="/assets/js/catalog.js?v=1791200208"></script>
 <script src="/assets/js/cart.js?v=1790797840"></script>
 <script src="/assets/js/main.js?v=1790797840"></script>
 <script>
@@ -241,7 +241,7 @@ function renderCartPage(){
       <div class="cart-row" data-id="${p.id}">
         <div class="thumb">${productImgTag(p, '')}</div>
         <div class="info">
-          <h4><a href="/product/${p.productId}&variant=${p.id}" class="text-link">${escHTML(p.name)}</a></h4>
+          <h4><a href="/product/${p.productId}?variant=${encodeURIComponent(p.id)}" class="text-link">${escHTML(p.name)}</a></h4>
           <div class="vendor">${escHTML(p.vendor)} · ${money(unitPrice)} each</div>
         </div>
         <div class="qty-stepper">
@@ -268,7 +268,7 @@ function renderCartPage(){
       </div>
     </div>`;
 
-  fetch('api/settings.php').then(r => r.json()).then(settings => {
+  fetch('/api/settings.php').then(r => r.json()).then(settings => {
     const threshold = settings.freeShippingThreshold;
     const noteEl = document.getElementById('cart-shipping-note');
     const lineEl = document.getElementById('cart-shipping-line');

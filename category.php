@@ -416,7 +416,7 @@ $ogImage = $SITE_URL . '/assets/img/hero/hero-stones.jpg';
   </div>
 </footer>
 
-<script src="/assets/js/catalog.js?v=1790797840"></script>
+<script src="/assets/js/catalog.js?v=1791200208"></script>
 <script src="/assets/js/cart.js?v=1790797840"></script>
 <script src="/assets/js/main.js?v=1790797840"></script>
 <?php if ($mode !== 'notfound'): ?><script>loadCatalog().then(renderCategoryPage);</script><?php endif; ?>

@@ -8,6 +8,7 @@ const API_BASE = '/api/';
 
 let PRODUCTS = [];
 let CATEGORIES = {};
+let VARIANT_INDEX = {};
 let CATALOG_LOADED = false;
 let catalogPromise = null;
 
@@ -34,6 +35,15 @@ function loadCatalog() {
     .then(data => {
       PRODUCTS = data.products || [];
       CATEGORIES = data.categories || {};
+      VARIANT_INDEX = {};
+      PRODUCTS.forEach(p => variantsOf(p).forEach(v => {
+        VARIANT_INDEX[v.id] = {
+          id: v.id, productId: p.id,
+          name: p.name + (v.label ? ' - ' + v.label : ''),
+          vendor: p.vendor, category: p.category,
+          price: v.price, sale: v.sale, sku: v.sku, stock: v.stock, label: v.label,
+        };
+      }));
       CATALOG_LOADED = true;
     })
     .catch(err => {
@@ -101,7 +111,7 @@ function placeholderDataURI(){
 
 function productImgTag(product, cssClass, eager){
   // Responsive WebP (400w/800w) with the original JPG as fallback. Mirrors bl_img() in includes/seo.php.
-  const id = encodeURIComponent(product.id);
+  const id = encodeURIComponent(product.productId || product.id);
   const w400 = `${IMG_BASE}w400/${id}.webp`;
   const w800 = `${IMG_BASE}w800/${id}.webp`;
   const jpg = `${IMG_BASE}${id}.jpg`;
@@ -124,6 +134,30 @@ function blImgFallback(img, jpg){
 
 function getProduct(id){
   return PRODUCTS.find(p => p.id === id);
+}
+
+/**
+ * Purchasable options of a product. Every product has at least one variant
+ * (for a plain product the variant id equals the product id); if the API
+ * sent none, fall back to the product itself.
+ */
+function variantsOf(p){
+  if (p.variants && p.variants.length) return p.variants;
+  return [{ id: p.id, sku: p.sku, price: p.price, sale: p.sale, stock: p.stock, label: '' }];
+}
+
+/**
+ * Looks up a cart line by its id: a variant id, or (for carts saved before
+ * variants existed) a plain product id. Returns { id, productId, name,
+ * vendor, category, price, sale, sku, stock, label } or undefined.
+ */
+function getVariant(id){
+  if (VARIANT_INDEX[id]) return VARIANT_INDEX[id];
+  const p = getProduct(id);
+  if (!p) return undefined;
+  const v = variantsOf(p)[0];
+  return { id: p.id, productId: p.id, name: p.name, vendor: p.vendor, category: p.category,
+           price: v.price, sale: v.sale, sku: v.sku, stock: v.stock, label: v.label };
 }
 
 function productsByCategory(cat){
@@ -230,34 +264,60 @@ function renderProductDetail(){
   const bestSellerBadge = document.getElementById('pdp-best-seller-badge');
   if (bestSellerBadge) bestSellerBadge.style.display = p.bestSeller ? 'inline-block' : 'none';
 
-  document.getElementById('pdp-sku').innerHTML = `SKU: <span>${escHTML(p.sku)}</span>`;
-
-  const priceBlock = document.getElementById('pdp-price-block');
-  if (p.sale){
-    const pct = Math.round((1 - p.sale/p.price)*100);
-    priceBlock.innerHTML = `<span class="price">${money(p.sale)}</span><span class="was">${money(p.price)}</span><span class="save">Save ${pct}%</span>`;
-  } else {
-    priceBlock.innerHTML = `<span class="price">${money(p.price)}</span>`;
-  }
-
-  const stockLabel = {in:'In stock, ships in 1–2 days', low:'Low stock, order soon', out:'Currently out of stock'}[p.stock] || '';
-  document.getElementById('pdp-stock').textContent = stockLabel;
-  document.getElementById('pdp-stock').style.color = p.stock === 'out' ? 'var(--oxblood)' : 'var(--green-d)';
-
   // Product-specific promo banner (fetched separately since it's time-window dependent)
   fetchProductPromoBanner(p.id);
-
-  const addBtn = document.querySelector('.pdp-actions .btn-accent');
-  if (p.stock === 'out' && addBtn){
-    addBtn.textContent = 'Out of Stock';
-    addBtn.disabled = true;
-    addBtn.style.opacity = .5;
-    addBtn.style.cursor = 'not-allowed';
-  }
 
   document.getElementById('pdp-meta-list').innerHTML = Object.entries(p.specs).slice(0,5).map(
     ([k,v]) => `<li><span>${escHTML(k)}</span><span>${escHTML(v)}</span></li>`
   ).join('') + `<li><span>SKU</span><span>${escHTML(p.sku)}</span></li>`;
+
+  // Variants (grit / size / motor ...): price, SKU, stock and the cart line follow the chosen option.
+  const variants = variantsOf(p);
+  const wanted = params.get('variant');
+  let current = variants.find(x => x.id === wanted) || variants.find(x => x.stock !== 'out') || variants[0];
+  const addBtn = document.getElementById('add-to-cart-btn');
+
+  function applyVariant(v){
+    current = v;
+    document.getElementById('pdp-sku').innerHTML = `SKU: <span>${escHTML(v.sku)}</span>`;
+    const priceBlock = document.getElementById('pdp-price-block');
+    if (v.sale){
+      const pct = Math.round((1 - v.sale/v.price)*100);
+      priceBlock.innerHTML = `<span class="price">${money(v.sale)}</span><span class="was">${money(v.price)}</span><span class="save">Save ${pct}%</span>`;
+    } else {
+      priceBlock.innerHTML = `<span class="price">${money(v.price)}</span>`;
+    }
+    const stockLabel = {in:'In stock, ships in 1–2 days', low:'Low stock, order soon', out:'Currently out of stock'}[v.stock] || '';
+    const stockEl = document.getElementById('pdp-stock');
+    stockEl.textContent = stockLabel;
+    stockEl.style.color = v.stock === 'out' ? 'var(--oxblood)' : 'var(--green-d)';
+    if (addBtn){
+      const out = v.stock === 'out';
+      addBtn.disabled = out;
+      addBtn.textContent = out ? 'Out of Stock' : 'Add to Cart';
+      addBtn.style.opacity = out ? .5 : '';
+      addBtn.style.cursor = out ? 'not-allowed' : '';
+    }
+    const skuRow = document.querySelector('#pdp-meta-list li:last-child span:last-child');
+    if (skuRow) skuRow.textContent = v.sku;
+  }
+
+  const picker = document.getElementById('pdp-variant-picker');
+  if (picker && variants.length > 1){
+    picker.innerHTML = `
+      <label for="pdp-variant-select" style="display:block; font-weight:600; margin:14px 0 6px;">Choose an option</label>
+      <select id="pdp-variant-select" style="width:100%; padding:12px 14px; font-size:17px; border:1px solid var(--line); border-radius:8px; background:#fff; color:inherit;">
+        ${variants.map(x => `<option value="${escHTML(x.id)}"${x.id === current.id ? ' selected' : ''}>${escHTML(x.label || x.sku)} - ${money(x.sale || x.price)}${x.stock === 'out' ? ' (out of stock)' : ''}</option>`).join('')}
+      </select>`;
+    picker.style.display = 'block';
+    document.getElementById('pdp-variant-select').addEventListener('change', (e) => {
+      const v = variants.find(x => x.id === e.target.value);
+      if (!v) return;
+      applyVariant(v);
+      try { history.replaceState(null, '', window.location.pathname + (v.id === variants[0].id ? '' : '?variant=' + encodeURIComponent(v.id))); } catch(err) {}
+    });
+  }
+  applyVariant(current);
 
   // Description tab: blurb may contain multiple paragraphs separated by a blank line
   const blurbParagraphs = p.blurb.split(/\n\s*\n/).map(para => `<p>${escHTML(para.trim())}</p>`);
@@ -290,14 +350,14 @@ function renderProductDetail(){
   if (p.recommends && p.recommends.length) renderProductList('pdp-recommends', p.recommends); // otherwise keep the server-rendered related products
 
   // Add to cart
-  const addBtn2 = document.getElementById('add-to-cart-btn');
-  if (addBtn2 && p.stock !== 'out') {
-    addBtn2.addEventListener('click', () => {
+  if (addBtn) {
+    addBtn.addEventListener('click', () => {
+      if (current.stock === 'out') return;
       const qty = parseInt(document.querySelector('.qty-stepper input').value, 10) || 1;
-      cartAdd(p.id, qty);
-      const original = addBtn2.textContent;
-      addBtn2.textContent = 'Added to Cart';
-      setTimeout(() => { addBtn2.textContent = original; }, 1600);
+      cartAdd(current.id, qty);
+      const original = addBtn.textContent;
+      addBtn.textContent = 'Added to Cart';
+      setTimeout(() => { addBtn.textContent = original; }, 1600);
     });
   }
 }
